@@ -24,12 +24,13 @@ This is used for a successful response.
 
 Returns `Plug.Conn.t()` with a status of `200` and a payload of
 
-```elixir %{
-               "current_page" => _,
-               "records" => _,
-               "total_pages" => _,
-               "total_records" => _
-             }
+```elixir
+%{
+  "current_page" => _,
+  "records" => _,
+  "total_pages" => _,
+  "total_records" => _
+}
 ```
 
 ### Response.created/3
