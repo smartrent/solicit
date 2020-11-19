@@ -1,4 +1,4 @@
-defmodule Solicit.Responses do
+defmodule Solicit.Response do
   @moduledoc """
   Standardized responses
   """
@@ -10,8 +10,26 @@ defmodule Solicit.Responses do
   alias Ecto.Changeset
 
   # 200
-  @spec ok(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
-  def ok(conn, result, fields \\ nil) do
+  @spec ok(
+          Plug.Conn.t(),
+          %{
+            records: list(),
+            current_page: integer(),
+            total_pages: integer(),
+            total_records: integer()
+          },
+          term()
+        ) :: Plug.Conn.t()
+  def ok(
+        conn,
+        %{
+          records: _,
+          current_page: _,
+          total_pages: _,
+          total_records: _
+        } = result,
+        fields \\ nil
+      ) do
     json(conn, as_json(result, fields))
   end
 
@@ -67,15 +85,6 @@ defmodule Solicit.Responses do
     |> halt()
   end
 
-  # 404
-  @spec not_found(Plug.Conn.t()) :: Plug.Conn.t()
-  def not_found(conn) do
-    conn
-    |> put_status(:not_found)
-    |> json(%{errors: [ResponseError.not_found()]})
-    |> halt()
-  end
-
   # 401
   @spec unauthorized(Plug.Conn.t()) :: Plug.Conn.t()
   def unauthorized(conn) do
@@ -91,6 +100,15 @@ defmodule Solicit.Responses do
     conn
     |> put_status(:forbidden)
     |> json(%{errors: [ResponseError.forbidden()]})
+    |> halt()
+  end
+
+  # 404
+  @spec not_found(Plug.Conn.t()) :: Plug.Conn.t()
+  def not_found(conn) do
+    conn
+    |> put_status(:not_found)
+    |> json(%{errors: [ResponseError.not_found()]})
     |> halt()
   end
 
