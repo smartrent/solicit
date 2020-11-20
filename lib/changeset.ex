@@ -6,7 +6,7 @@ defmodule Solicit.Changeset do
   @doc """
   A module encapsulating the translation layer between a changeset error and the JSON error shape returned in an API response.
   """
-  @spec code_and_description(map()) :: map()
+  @spec code_and_description(tuple()) :: tuple()
   def code_and_description({"can't be blank", _}),
     do: {:required, "This value cannot be blank."}
 
