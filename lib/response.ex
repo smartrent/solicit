@@ -10,6 +10,9 @@ defmodule Solicit.Response do
   alias Ecto.Changeset
 
   # 200
+  @doc """
+  Returns a successful response.
+  """
   @spec ok(
           Plug.Conn.t(),
           %{
@@ -33,12 +36,18 @@ defmodule Solicit.Response do
     json(conn, as_json(result, fields))
   end
 
+  @doc """
+  Returns a successful response with no payload.
+  """
   @spec ok(Plug.Conn.t()) :: Plug.Conn.t()
   def ok(conn) do
     json(conn, nil)
   end
 
   # 201
+  @doc """
+  Returns a successful created response.
+  """
   @spec created(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
   def created(conn, result, fields \\ nil) do
     conn
@@ -47,6 +56,9 @@ defmodule Solicit.Response do
   end
 
   # 202
+  @doc """
+  Returns a successful accepted response. Normally used to signify that the request was accepted, but might not have finished processing.
+  """
   @spec accepted(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def accepted(conn, details) when is_binary(details) do
     conn
@@ -55,12 +67,18 @@ defmodule Solicit.Response do
   end
 
   # 204
+  @doc """
+  Returns a successful no_content response. Normally used when deleting.
+  """
   @spec no_content(Plug.Conn.t()) :: Plug.Conn.t()
   def no_content(conn) do
     send_resp(conn, :no_content, "")
   end
 
   # 400
+  @doc """
+  Signifies a bad request.
+  """
   @spec bad_request(Plug.Conn.t()) :: Plug.Conn.t()
   def bad_request(conn) do
     conn
@@ -86,6 +104,9 @@ defmodule Solicit.Response do
   end
 
   # 401
+  @doc """
+  Signifies an unauthorized request.
+  """
   @spec unauthorized(Plug.Conn.t()) :: Plug.Conn.t()
   def unauthorized(conn) do
     conn
@@ -95,6 +116,9 @@ defmodule Solicit.Response do
   end
 
   # 403
+  @doc """
+  Signifies a forbidden response.
+  """
   @spec forbidden(Plug.Conn.t()) :: Plug.Conn.t()
   def forbidden(conn) do
     conn
@@ -104,6 +128,9 @@ defmodule Solicit.Response do
   end
 
   # 404
+  @doc """
+  Signifies a not found response.
+  """
   @spec not_found(Plug.Conn.t()) :: Plug.Conn.t()
   def not_found(conn) do
     conn
@@ -113,6 +140,9 @@ defmodule Solicit.Response do
   end
 
   # 409
+  @doc """
+  Signifies a conflicting response.
+  """
   @spec conflict(Plug.Conn.t(), binary()) :: Plug.Conn.t()
   def conflict(conn, description) do
     conn
@@ -122,6 +152,9 @@ defmodule Solicit.Response do
   end
 
   # 422
+  @doc """
+  Signifies an unprocessable_entity response.
+  """
   @spec unprocessable_entity(Plug.Conn.t(), Ecto.Changeset.t() | binary() | Postgrex.Error.t()) ::
           Plug.Conn.t()
   def unprocessable_entity(conn, %Changeset{} = changeset) do
@@ -154,6 +187,9 @@ defmodule Solicit.Response do
   end
 
   # 500
+  @doc """
+  Signifies an internal_server_error request.
+  """
   @spec internal_server_error(Plug.Conn.t(), binary()) :: Plug.Conn.t()
   def internal_server_error(conn, message) when is_binary(message) do
     conn
