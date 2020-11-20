@@ -24,7 +24,7 @@ defmodule Solicit.MixProject do
       {:jason, "~> 1.0"},
       {:phoenix_ecto, "~> 4.1.0"},
       {:phoenix, "~> 1.4"},
-      {:plug_cowboy, "~> 1.0"},
+      {:plug_cowboy, ">= 1.0.0"},
       {:postgrex, ">= 0.0.0"}
     ]
   end
