@@ -15,7 +15,12 @@ defmodule Solicit.ResponseTest do
     test "Should return the correct shape" do
       response =
         build_conn()
-        |> Response.ok(%{records: [], current_page: 1, total_pages: 1, total_records: 0})
+        |> Response.ok(%{records: [], current_page: 1, total_pages: 1, total_records: 0}, [
+          :records,
+          :current_page,
+          :total_pages,
+          :total_records
+        ])
         |> json_response(:ok)
 
       assert response == %{
@@ -24,6 +29,22 @@ defmodule Solicit.ResponseTest do
                "total_pages" => 1,
                "total_records" => 0
              }
+    end
+
+    test "Should raise error" do
+      assert_raise(RuntimeError, fn ->
+        Response.ok(
+          build_conn(),
+          %{records: [], current_page: 1, total_pages: 1, total_records: 0},
+          [
+            :records,
+            :current_page,
+            :total_pages,
+            :total_records,
+            :test
+          ]
+        )
+      end)
     end
   end
 
@@ -35,6 +56,22 @@ defmodule Solicit.ResponseTest do
         |> json_response(:created)
 
       assert response == %{}
+    end
+
+    test "Should raise error" do
+      assert_raise(RuntimeError, fn ->
+        Response.created(
+          build_conn(),
+          %{records: [], current_page: 1, total_pages: 1, total_records: 0},
+          [
+            :records,
+            :current_page,
+            :total_pages,
+            :total_records,
+            :test
+          ]
+        )
+      end)
     end
   end
 

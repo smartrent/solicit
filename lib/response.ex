@@ -6,8 +6,8 @@ defmodule Solicit.Response do
   import Plug.Conn
   import Phoenix.Controller
 
-  alias Solicit.ResponseError
   alias Ecto.Changeset
+  alias Solicit.ResponseError
 
   # 200
   @doc """
@@ -15,25 +15,16 @@ defmodule Solicit.Response do
   """
   @spec ok(
           Plug.Conn.t(),
-          %{
-            records: list(),
-            current_page: integer(),
-            total_pages: integer(),
-            total_records: integer()
-          },
+          term(),
           term()
         ) :: Plug.Conn.t()
   def ok(
         conn,
-        %{
-          records: _,
-          current_page: _,
-          total_pages: _,
-          total_records: _
-        } = result,
+        result,
         fields \\ nil
       ) do
-    json(conn, as_json(result, fields))
+    has_all_fields(result, fields)
+    json(conn, result)
   end
 
   @doc """
@@ -50,9 +41,11 @@ defmodule Solicit.Response do
   """
   @spec created(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
   def created(conn, result, fields \\ nil) do
+    has_all_fields(result, fields)
+
     conn
     |> put_status(:created)
-    |> json(as_json(result, fields))
+    |> json(result)
   end
 
   # 202
@@ -91,7 +84,7 @@ defmodule Solicit.Response do
   def bad_request(conn, %Ecto.Changeset{} = changeset) do
     conn
     |> put_status(:bad_request)
-    |> json(%{errors: [ResponseError.from_changeset(changeset)]})
+    |> json(%{errors: ResponseError.from_changeset(changeset)})
     |> halt()
   end
 
@@ -284,8 +277,7 @@ defmodule Solicit.Response do
   def as_json(nil, _fields), do: nil
 
   def as_json(struct, fields) do
-    fields
-    |> Enum.reduce(%{}, fn field, acc ->
+    Enum.reduce(fields, %{}, fn field, acc ->
       {field, value} =
         case field do
           {field, generate} when is_function(generate, 1) ->
@@ -332,6 +324,18 @@ defmodule Solicit.Response do
        end)}
     else
       {field, as_json(assoc, assoc_fields)}
+    end
+  end
+
+  @spec has_all_fields(term(), term()) :: no_return()
+  defp has_all_fields(result, fields) do
+    # If fields are provided make sure they exist
+    if not is_nil(fields) do
+      Enum.map(fields, fn field ->
+        if is_nil(Map.get(result, field)) do
+          raise "All provided fields must be in result"
+        end
+      end)
     end
   end
 end
