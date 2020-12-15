@@ -106,6 +106,20 @@ defmodule Solicit.ResponseTest do
       |> Response.unauthorized()
       |> json_response(:unauthorized)
     end
+
+    test "Should return 401 with custom errors" do
+      response =
+        build_conn()
+        |> Response.unauthorized([
+          %{
+            code: "invalid",
+            description: "Invalid code"
+          }
+        ])
+        |> json_response(:unauthorized)
+
+      assert response == %{"errors" => [%{"code" => "invalid", "description" => "Invalid code"}]}
+    end
   end
 
   describe "forbidden" do
@@ -113,6 +127,56 @@ defmodule Solicit.ResponseTest do
       build_conn()
       |> Response.forbidden()
       |> json_response(:forbidden)
+    end
+
+    test "Should return 403 with custom errors" do
+      response =
+        build_conn()
+        |> Response.forbidden([
+          %{
+            code: "lockout",
+            description: "Too many attempts, please try again later"
+          }
+        ])
+        |> json_response(:forbidden)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "lockout",
+                   "description" => "Too many attempts, please try again later"
+                 }
+               ]
+             }
+    end
+  end
+
+  describe "not_found" do
+    test "Should return 404" do
+      build_conn()
+      |> Response.not_found()
+      |> json_response(:not_found)
+    end
+
+    test "Should return 404 with custom errors" do
+      response =
+        build_conn()
+        |> Response.not_found([
+          %{
+            code: "not_found",
+            description: "Re-enter username and password"
+          }
+        ])
+        |> json_response(:not_found)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "not_found",
+                   "description" => "Re-enter username and password"
+                 }
+               ]
+             }
     end
   end
 
@@ -125,6 +189,27 @@ defmodule Solicit.ResponseTest do
 
       assert response["errors"] == [%{"code" => "conflict", "description" => "test"}]
     end
+
+    test "Should return 409 with custom errors" do
+      response =
+        build_conn()
+        |> Response.conflict([
+          %{
+            code: "conflict",
+            description: "resolution"
+          }
+        ])
+        |> json_response(:conflict)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "conflict",
+                   "description" => "resolution"
+                 }
+               ]
+             }
+    end
   end
 
   describe "unprocessable_entity" do
@@ -132,6 +217,27 @@ defmodule Solicit.ResponseTest do
       build_conn()
       |> Response.unprocessable_entity()
       |> json_response(:unprocessable_entity)
+    end
+
+    test "Should return 422 with custom errors" do
+      response =
+        build_conn()
+        |> Response.unprocessable_entity([
+          %{
+            code: "unprocessable_entity",
+            description: "This was an error"
+          }
+        ])
+        |> json_response(:unprocessable_entity)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "This was an error"
+                 }
+               ]
+             }
     end
   end
 

@@ -100,6 +100,14 @@ defmodule Solicit.Response do
   @doc """
   Signifies an unauthorized request.
   """
+  @spec unauthorized(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  def unauthorized(conn, errors) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
   @spec unauthorized(Plug.Conn.t()) :: Plug.Conn.t()
   def unauthorized(conn) do
     conn
@@ -112,6 +120,14 @@ defmodule Solicit.Response do
   @doc """
   Signifies a forbidden response.
   """
+  @spec forbidden(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  def forbidden(conn, errors) do
+    conn
+    |> put_status(:forbidden)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
   @spec forbidden(Plug.Conn.t()) :: Plug.Conn.t()
   def forbidden(conn) do
     conn
@@ -124,6 +140,14 @@ defmodule Solicit.Response do
   @doc """
   Signifies a not found response.
   """
+  @spec not_found(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  def not_found(conn, errors) do
+    conn
+    |> put_status(:not_found)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
   @spec not_found(Plug.Conn.t()) :: Plug.Conn.t()
   def not_found(conn) do
     conn
@@ -136,8 +160,15 @@ defmodule Solicit.Response do
   @doc """
   Signifies a conflicting response.
   """
-  @spec conflict(Plug.Conn.t(), binary()) :: Plug.Conn.t()
-  def conflict(conn, description) do
+  @spec conflict(Plug.Conn.t(), list() | binary()) :: Plug.Conn.t()
+  def conflict(conn, errors) when is_list(errors) do
+    conn
+    |> put_status(:conflict)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  def conflict(conn, description) when is_binary(description) do
     conn
     |> put_status(:conflict)
     |> json(%{errors: [ResponseError.conflict(description)]})
@@ -148,7 +179,10 @@ defmodule Solicit.Response do
   @doc """
   Signifies an unprocessable_entity response.
   """
-  @spec unprocessable_entity(Plug.Conn.t(), Ecto.Changeset.t() | binary() | Postgrex.Error.t()) ::
+  @spec unprocessable_entity(
+          Plug.Conn.t(),
+          Ecto.Changeset.t() | binary() | Postgrex.Error.t() | list()
+        ) ::
           Plug.Conn.t()
   def unprocessable_entity(conn, %Changeset{} = changeset) do
     conn
@@ -168,6 +202,13 @@ defmodule Solicit.Response do
     conn
     |> put_status(:unprocessable_entity)
     |> json(%{errors: [message]})
+    |> halt()
+  end
+
+  def unprocessable_entity(conn, errors) when is_list(errors) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{errors: errors})
     |> halt()
   end
 
