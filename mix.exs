@@ -27,7 +27,7 @@ defmodule Solicit.MixProject do
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:git_hooks, "~> 0.5.0", only: [:test, :dev], runtime: false},
       {:jason, "~> 1.0"},
-      {:phoenix_ecto, "~> 4.1.0"},
+      {:phoenix_ecto, "~> 4.1"},
       {:phoenix, "~> 1.4"},
       {:plug_cowboy, ">= 1.0.0"},
       {:postgrex, ">= 0.0.0"}
