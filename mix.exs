@@ -1,7 +1,7 @@
 defmodule Solicit.MixProject do
   use Mix.Project
 
-  @version "1.0.2"
+  @version "1.0.3"
 
   def project do
     [
@@ -10,6 +10,8 @@ defmodule Solicit.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      description: description(),
+      package: package(),
       dialyzer: dialyzer(),
       aliases: aliases()
     ]
@@ -43,6 +45,19 @@ defmodule Solicit.MixProject do
   defp dialyzer() do
     [
       flags: [:unmatched_returns, :error_handling, :race_conditions]
+    ]
+  end
+
+  defp description() do
+    "Solicit is an Elixir package that provides basic API Response Handling."
+  end
+
+  defp package() do
+    [
+      # These are the default files included in the package
+      files: ~w(lib mix.exs README*),
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/smartrent/solicit"}
     ]
   end
 end
