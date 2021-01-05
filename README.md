@@ -21,3 +21,11 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
+
+## Publishing
+
+Using the `--organization` flag is important to keep the repository **private**.
+
+```bash
+mix hex.publish --organization smartrent
+```
