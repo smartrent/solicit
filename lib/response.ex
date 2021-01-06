@@ -187,7 +187,7 @@ defmodule Solicit.Response do
   def unprocessable_entity(conn, %Changeset{} = changeset) do
     conn
     |> put_status(:unprocessable_entity)
-    |> json(%{errors: [ResponseError.from_changeset(changeset)]})
+    |> json(%{errors: ResponseError.from_changeset(changeset)})
     |> halt()
   end
 

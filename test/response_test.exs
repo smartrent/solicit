@@ -219,6 +219,32 @@ defmodule Solicit.ResponseTest do
       |> json_response(:unprocessable_entity)
     end
 
+    defmodule Foo do
+      defstruct [:id, :name]
+    end
+
+    test "Should return 422 for a changeset" do
+      changeset =
+        {%Foo{}, %{id: :string, name: :string}}
+        |> Ecto.Changeset.change()
+        |> Ecto.Changeset.validate_required([:id])
+
+      response =
+        build_conn()
+        |> Response.unprocessable_entity(changeset)
+        |> json_response(:unprocessable_entity)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "unknown_error",
+                   "description" => "can't be blank",
+                   "field" => "id"
+                 }
+               ]
+             }
+    end
+
     test "Should return 422 with custom errors" do
       response =
         build_conn()
