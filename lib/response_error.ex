@@ -39,6 +39,13 @@ defmodule Solicit.ResponseError do
       description: "Must include valid Authorization credentials"
     }
 
+  @spec method_not_allowed :: ResponseError.t()
+  def method_not_allowed,
+    do: %ResponseError{
+      code: :method_not_allowed,
+      description: "Method is not allowed."
+    }
+
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
   """
