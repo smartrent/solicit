@@ -160,7 +160,7 @@ defmodule Solicit.Response do
   @doc """
   Signifies a method not allowed response.
   """
-  @spec not_found(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  @spec method_not_allowed(Plug.Conn.t(), list()) :: Plug.Conn.t()
   def method_not_allowed(conn, errors) do
     conn
     |> put_status(:method_not_allowed)
