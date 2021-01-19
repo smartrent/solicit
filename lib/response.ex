@@ -156,6 +156,26 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 405
+  @doc """
+  Signifies a method not allowed response.
+  """
+  @spec method_not_allowed(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  def method_not_allowed(conn, errors) do
+    conn
+    |> put_status(:method_not_allowed)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  @spec method_not_allowed(Plug.Conn.t()) :: Plug.Conn.t()
+  def method_not_allowed(conn) do
+    conn
+    |> put_status(:method_not_allowed)
+    |> json(%{errors: [ResponseError.method_not_allowed()]})
+    |> halt()
+  end
+
   # 409
   @doc """
   Signifies a conflicting response.
