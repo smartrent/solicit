@@ -24,6 +24,9 @@ defmodule Solicit.ResponseError do
   @spec not_found :: ResponseError.t()
   def not_found, do: %ResponseError{code: :not_found, description: "The resource was not found."}
 
+  @spec timeout :: ResponseError.t()
+  def timeout, do: %ResponseError{code: :timeout, description: "Request timed out."}
+
   @spec unprocessable_entity :: ResponseError.t()
   def unprocessable_entity,
     do: %ResponseError{code: :unprocessable_entity, description: "Unable to process change."}
@@ -45,6 +48,10 @@ defmodule Solicit.ResponseError do
       code: :method_not_allowed,
       description: "Method is not allowed."
     }
+
+  @spec internal_server_error :: ResponseError.t()
+  def internal_server_error,
+    do: %ResponseError{code: :internal_server_error, description: "Internal Server Error"}
 
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.

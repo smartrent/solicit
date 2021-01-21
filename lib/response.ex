@@ -176,6 +176,26 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 408
+  @doc """
+  Signifies a request timeout response.
+  """
+  @spec timeout(Plug.Conn.t(), list()) :: Plug.Conn.t()
+  def timeout(conn, errors) do
+    conn
+    |> put_status(:request_timeout)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  @spec timeout(Plug.Conn.t()) :: Plug.Conn.t()
+  def timeout(conn) do
+    conn
+    |> put_status(:request_timeout)
+    |> json(%{errors: [ResponseError.timeout()]})
+    |> halt()
+  end
+
   # 409
   @doc """
   Signifies a conflicting response.
@@ -244,11 +264,26 @@ defmodule Solicit.Response do
   @doc """
   Signifies an internal_server_error request.
   """
-  @spec internal_server_error(Plug.Conn.t(), binary()) :: Plug.Conn.t()
+  @spec internal_server_error(Plug.Conn.t(), binary() | list()) :: Plug.Conn.t()
   def internal_server_error(conn, message) when is_binary(message) do
     conn
     |> put_status(:internal_server_error)
     |> json(%{errors: [message]})
+    |> halt()
+  end
+
+  def internal_server_error(conn, errors) when is_list(errors) do
+    conn
+    |> put_status(:internal_server_error)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  @spec internal_server_error(Plug.Conn.t()) :: Plug.Conn.t()
+  def internal_server_error(conn) do
+    conn
+    |> put_status(:internal_server_error)
+    |> json(%{errors: [ResponseError.internal_server_error()]})
     |> halt()
   end
 
