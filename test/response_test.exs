@@ -180,6 +180,72 @@ defmodule Solicit.ResponseTest do
     end
   end
 
+  describe "method_not_allowed" do
+    test "Should return 405" do
+      response =
+        build_conn()
+        |> Response.method_not_allowed()
+        |> json_response(:method_not_allowed)
+
+      assert response["errors"] == [
+               %{"code" => "method_not_allowed", "description" => "Method is not allowed."}
+             ]
+    end
+
+    test "Should return 405 with custom errors" do
+      response =
+        build_conn()
+        |> Response.method_not_allowed([
+          %{
+            code: "method_not_allowed",
+            description: "resolution"
+          }
+        ])
+        |> json_response(:method_not_allowed)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "method_not_allowed",
+                   "description" => "resolution"
+                 }
+               ]
+             }
+    end
+  end
+
+  describe "timeout" do
+    test "Should return 408" do
+      response =
+        build_conn()
+        |> Response.timeout()
+        |> json_response(:request_timeout)
+
+      assert response["errors"] == [%{"code" => "timeout", "description" => "Request timed out."}]
+    end
+
+    test "Should return 408 with custom errors" do
+      response =
+        build_conn()
+        |> Response.timeout([
+          %{
+            code: "timeout",
+            description: "resolution"
+          }
+        ])
+        |> json_response(:request_timeout)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "timeout",
+                   "description" => "resolution"
+                 }
+               ]
+             }
+    end
+  end
+
   describe "conflict" do
     test "Should return 409" do
       response =
@@ -275,6 +341,43 @@ defmodule Solicit.ResponseTest do
         |> json_response(:internal_server_error)
 
       assert response["errors"] == ["test"]
+    end
+
+    test "Should return base 500 error" do
+      response =
+        build_conn()
+        |> Response.internal_server_error()
+        |> json_response(:internal_server_error)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "internal_server_error",
+                   "description" => "Internal Server Error"
+                 }
+               ]
+             }
+    end
+
+    test "Should return custom 500 errors" do
+      response =
+        build_conn()
+        |> Response.internal_server_error([
+          %{
+            code: "internal_server_error",
+            description: "This was an error"
+          }
+        ])
+        |> json_response(:internal_server_error)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "internal_server_error",
+                   "description" => "This was an error"
+                 }
+               ]
+             }
     end
   end
 end
