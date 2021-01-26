@@ -45,6 +45,18 @@ This is used for a successful created response.
 
 Returns `Plug.Conn.t()` with a status of `201` and the result passed in as the payload.
 
+### Response.accepted/1
+
+Usage:
+
+This is used for an accepted response. Normally used to signify that the request was accepted, but might not have finished processing.
+
+```elixir
+  Response.accepted(conn)
+```
+
+Returns `Plug.Conn.t()` with a status of `202` and an empty payload.
+
 ### Response.accepted/2
 
 Usage:

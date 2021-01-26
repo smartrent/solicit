@@ -75,7 +75,18 @@ defmodule Solicit.ResponseTest do
     end
   end
 
-  describe "accepted" do
+  describe "accepted/1" do
+    test "Should return 202" do
+      response =
+        build_conn()
+        |> Response.accepted()
+        |> json_response(:accepted)
+
+      assert response == nil
+    end
+  end
+
+  describe "accepted/2" do
     test "Should return 202" do
       response =
         build_conn()
