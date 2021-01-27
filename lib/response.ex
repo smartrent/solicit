@@ -52,6 +52,13 @@ defmodule Solicit.Response do
   @doc """
   Returns a successful accepted response. Normally used to signify that the request was accepted, but might not have finished processing.
   """
+  @spec accepted(Plug.Conn.t()) :: Plug.Conn.t()
+  def accepted(conn) do
+    conn
+    |> put_status(:accepted)
+    |> json(nil)
+  end
+
   @spec accepted(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def accepted(conn, details) when is_binary(details) do
     conn
