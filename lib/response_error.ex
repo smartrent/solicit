@@ -12,46 +12,52 @@ defmodule Solicit.ResponseError do
 
   @type t :: %__MODULE__{}
 
-  @spec generic_error :: ResponseError.t()
-  def generic_error, do: %ResponseError{code: :error, description: "An unknown error occurred."}
+  @spec generic_error(binary()) :: ResponseError.t()
+  def generic_error(description \\ "An unknown error occurred."),
+    do: %ResponseError{code: :error, description: description}
 
-  @spec bad_request :: ResponseError.t()
-  def bad_request, do: %ResponseError{code: :bad_request, description: "Bad request."}
+  @spec bad_request(binary()) :: ResponseError.t()
+  def bad_request(description \\ "Bad request."),
+    do: %ResponseError{code: :bad_request, description: description}
 
-  @spec forbidden :: ResponseError.t()
-  def forbidden, do: %ResponseError{code: :forbidden, description: "This action is forbidden."}
+  @spec forbidden(binary()) :: ResponseError.t()
+  def forbidden(description \\ "This action is forbidden."),
+    do: %ResponseError{code: :forbidden, description: description}
 
-  @spec not_found :: ResponseError.t()
-  def not_found, do: %ResponseError{code: :not_found, description: "The resource was not found."}
+  @spec not_found(binary()) :: ResponseError.t()
+  def not_found(description \\ "The resource was not found."),
+    do: %ResponseError{code: :not_found, description: description}
 
-  @spec timeout :: ResponseError.t()
-  def timeout, do: %ResponseError{code: :timeout, description: "Request timed out."}
+  @spec timeout(binary()) :: ResponseError.t()
+  def timeout(description \\ "Request timed out."),
+    do: %ResponseError{code: :timeout, description: description}
 
-  @spec unprocessable_entity :: ResponseError.t()
-  def unprocessable_entity,
-    do: %ResponseError{code: :unprocessable_entity, description: "Unable to process change."}
+  @spec unprocessable_entity(binary()) :: ResponseError.t()
+  def unprocessable_entity(description \\ "Unable to process change.")
+      when is_binary(description),
+      do: %ResponseError{code: :unprocessable_entity, description: description}
 
   @spec conflict(binary()) :: ResponseError.t()
   def conflict(description) when is_binary(description),
     do: %ResponseError{code: :conflict, description: description}
 
-  @spec unauthorized :: ResponseError.t()
-  def unauthorized,
+  @spec unauthorized(binary()) :: ResponseError.t()
+  def unauthorized(description \\ "Must include valid Authorization credentials"),
     do: %ResponseError{
       code: :unauthorized,
-      description: "Must include valid Authorization credentials"
+      description: description
     }
 
-  @spec method_not_allowed :: ResponseError.t()
-  def method_not_allowed,
+  @spec method_not_allowed(binary()) :: ResponseError.t()
+  def method_not_allowed(description \\ "Method is not allowed."),
     do: %ResponseError{
       code: :method_not_allowed,
-      description: "Method is not allowed."
+      description: description
     }
 
-  @spec internal_server_error :: ResponseError.t()
-  def internal_server_error,
-    do: %ResponseError{code: :internal_server_error, description: "Internal Server Error"}
+  @spec internal_server_error(binary()) :: ResponseError.t()
+  def internal_server_error(description \\ "Internal Server Error"),
+    do: %ResponseError{code: :internal_server_error, description: description}
 
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
