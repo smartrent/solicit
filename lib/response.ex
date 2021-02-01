@@ -267,6 +267,26 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 429
+  @doc """
+  Signifies an too_many_requests request.
+  """
+  @spec too_many_requests(Plug.Conn.t()) :: Plug.Conn.t()
+  def too_many_requests(conn) do
+    conn
+    |> put_status(:too_many_requests)
+    |> json(%{errors: [ResponseError.too_many_requests()]})
+    |> halt()
+  end
+
+  @spec too_many_requests(Plug.Conn.t(), binary()) :: Plug.Conn.t()
+  def too_many_requests(conn, message) when is_binary(message) do
+    conn
+    |> put_status(:too_many_requests)
+    |> json(%{errors: [ResponseError.too_many_requests(message)]})
+    |> halt()
+  end
+
   # 500
   @doc """
   Signifies an internal_server_error request.

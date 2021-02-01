@@ -59,6 +59,13 @@ defmodule Solicit.ResponseError do
   def internal_server_error(description \\ "Internal Server Error"),
     do: %ResponseError{code: :internal_server_error, description: description}
 
+  @spec too_many_requests(binary()) :: ResponseError.t()
+  def too_many_requests(description \\ "Exceeded request threshold."),
+    do: %ResponseError{
+      code: :too_many_requests,
+      description: description
+    }
+
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
   """
