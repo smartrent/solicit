@@ -344,6 +344,42 @@ defmodule Solicit.ResponseTest do
     end
   end
 
+  describe "too_many_requests" do
+    test "Should return 429 with default error" do
+      response =
+        build_conn()
+        |> Response.too_many_requests()
+        |> json_response(:too_many_requests)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "too_many_requests",
+                   "description" => "Exceeded request threshold."
+                 }
+               ]
+             }
+    end
+
+    test "Should return 429 with custom error message" do
+      message = "You've exceeded the allowed threshold."
+
+      response =
+        build_conn()
+        |> Response.too_many_requests(message)
+        |> json_response(:too_many_requests)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "too_many_requests",
+                   "description" => message
+                 }
+               ]
+             }
+    end
+  end
+
   describe "internal_server_error" do
     test "Should return 500" do
       response =
