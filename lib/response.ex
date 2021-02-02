@@ -450,7 +450,7 @@ defmodule Solicit.Response do
     end
   end
 
-  @spec has_all_fields(term(), term()) :: :ok
+  @spec has_all_fields(term(), term()) :: :ok | none()
   defp has_all_fields(result, fields) do
     # If fields are provided make sure they exist
     unless is_nil(fields) do
@@ -460,7 +460,7 @@ defmodule Solicit.Response do
     :ok
   end
 
-  @spec process_fields(term(), term()) :: :ok
+  @spec process_fields(term(), term()) :: :ok | none()
   defp process_fields(_result, {_field, value}) when is_function(value), do: :ok
 
   defp process_fields(result, {field, sub_fields}) when is_list(sub_fields) do
