@@ -470,15 +470,38 @@ defmodule Solicit.Response do
     end
   end
 
-  @spec has_all_fields(term(), term()) :: no_return()
+  @spec has_all_fields(term(), term()) :: :ok | none()
   defp has_all_fields(result, fields) do
     # If fields are provided make sure they exist
-    if not is_nil(fields) do
-      Enum.map(fields, fn field ->
-        if is_nil(Map.get(result, field)) do
-          raise "All provided fields must be in result"
-        end
-      end)
+    unless is_nil(fields) do
+      Enum.each(fields, &process_fields(result, &1))
+    end
+
+    :ok
+  end
+
+  @spec process_fields(term(), term()) :: :ok | none()
+  defp process_fields(_result, {_field, value}) when is_function(value), do: :ok
+
+  defp process_fields(result, {field, sub_fields}) when is_list(sub_fields) do
+    case Map.get(result, field) do
+      result when is_list(result) ->
+        Enum.each(result, &has_all_fields(&1, sub_fields))
+
+      result when is_map(result) ->
+        has_all_fields(result, sub_fields)
+
+      _ ->
+        raise_fields_error()
     end
   end
+
+  defp process_fields(result, field) do
+    if is_nil(Map.get(result, field)) do
+      raise_fields_error()
+    end
+  end
+
+  @spec raise_fields_error :: no_return()
+  defp raise_fields_error, do: raise("All provided fields must be in result")
 end
