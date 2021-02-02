@@ -289,6 +289,42 @@ defmodule Solicit.ResponseTest do
     end
   end
 
+  describe "gone" do
+    test "Should return 410 with default error" do
+      response =
+        build_conn()
+        |> Response.gone()
+        |> json_response(:gone)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "gone",
+                   "description" => "Access to resource is no longer available."
+                 }
+               ]
+             }
+    end
+
+    test "Should return 410 with custom error message" do
+      message = "Token expired."
+
+      response =
+        build_conn()
+        |> Response.gone(message)
+        |> json_response(:gone)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "gone",
+                   "description" => message
+                 }
+               ]
+             }
+    end
+  end
+
   describe "unprocessable_entity" do
     test "Should return 422" do
       build_conn()

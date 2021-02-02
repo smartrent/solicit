@@ -66,6 +66,10 @@ defmodule Solicit.ResponseError do
       description: description
     }
 
+  @spec gone(binary()) :: ResponseError.t()
+  def gone(description \\ "Access to resource is no longer available."),
+    do: %ResponseError{code: :gone, description: description}
+
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
   """
