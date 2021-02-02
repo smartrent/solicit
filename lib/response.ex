@@ -222,6 +222,26 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 410
+  @doc """
+  Signifies a gone response.
+  """
+  @spec gone(Plug.Conn.t()) :: Plug.Conn.t()
+  def gone(conn) do
+    conn
+    |> put_status(:gone)
+    |> json(%{errors: [ResponseError.gone()]})
+    |> halt()
+  end
+
+  @spec gone(Plug.Conn.t(), binary()) :: Plug.Conn.t()
+  def gone(conn, description) do
+    conn
+    |> put_status(:gone)
+    |> json(%{errors: [ResponseError.gone(description)]})
+    |> halt()
+  end
+
   # 422
   @doc """
   Signifies an unprocessable_entity response.
