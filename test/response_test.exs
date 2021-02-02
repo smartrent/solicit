@@ -499,6 +499,25 @@ defmodule Solicit.ResponseTest do
       |> json_response(:ok)
     end
 
+    test "Should allow nil values in the result " do
+      build_conn()
+      |> Response.ok(
+        %{
+          space_number: "Test",
+          vehicle: %{license_plate: "License Plate", state: nil}
+        },
+        [
+          :space_number,
+          vehicle: [
+            :license_plate,
+            :state,
+          ]
+        ]
+      )
+      |> json_response(:ok)
+    end
+
+
     test "Should return the correct shape for a list of sub structures when defined" do
       build_conn()
       |> Response.ok(

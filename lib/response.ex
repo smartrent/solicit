@@ -480,7 +480,7 @@ defmodule Solicit.Response do
     :ok
   end
 
-  @spec process_fields(term(), term()) :: :ok | none()
+  @spec process_fields(term(), term()) :: :ok | none() | nil
   defp process_fields(_result, {_field, value}) when is_function(value), do: :ok
 
   defp process_fields(result, {field, sub_fields}) when is_list(sub_fields) do
@@ -497,7 +497,7 @@ defmodule Solicit.Response do
   end
 
   defp process_fields(result, field) do
-    if is_nil(Map.get(result, field)) do
+    unless Map.has_key?(result, field) do
       raise_fields_error()
     end
   end
