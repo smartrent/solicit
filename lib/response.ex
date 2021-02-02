@@ -222,7 +222,7 @@ defmodule Solicit.Response do
     |> halt()
   end
 
-  # 409
+  # 410
   @doc """
   Signifies a gone response.
   """
