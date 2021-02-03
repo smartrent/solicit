@@ -53,6 +53,19 @@ defmodule Solicit.ResponseTest do
 
       assert response == %{}
     end
+
+    test "Should return on the fields passed" do
+      response =
+        build_conn()
+        |> Response.created(%{license_plate: "Test", state: "VA"}, [
+          :license_plate
+        ])
+        |> json_response(:created)
+
+      assert response == %{
+               "license_plate" => "Test",
+             }
+    end
   end
 
   describe "accepted/1" do
