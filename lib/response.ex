@@ -23,8 +23,7 @@ defmodule Solicit.Response do
         result,
         fields \\ nil
       ) do
-    has_all_fields(result, fields)
-    json(conn, result)
+    json(conn, as_json(result, fields))
   end
 
   @doc """
@@ -41,11 +40,9 @@ defmodule Solicit.Response do
   """
   @spec created(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
   def created(conn, result, fields \\ nil) do
-    has_all_fields(result, fields)
-
     conn
     |> put_status(:created)
-    |> json(result)
+    |> json(as_json(result, fields))
   end
 
   # 202
@@ -469,39 +466,4 @@ defmodule Solicit.Response do
       {field, as_json(assoc, assoc_fields)}
     end
   end
-
-  @spec has_all_fields(term(), term()) :: :ok | none()
-  defp has_all_fields(result, fields) do
-    # If fields are provided make sure they exist
-    unless is_nil(fields) do
-      Enum.each(fields, &process_fields(result, &1))
-    end
-
-    :ok
-  end
-
-  @spec process_fields(term(), term()) :: :ok | none() | nil
-  defp process_fields(_result, {_field, value}) when is_function(value), do: :ok
-
-  defp process_fields(result, {field, sub_fields}) when is_list(sub_fields) do
-    case Map.get(result, field) do
-      result when is_list(result) ->
-        Enum.each(result, &has_all_fields(&1, sub_fields))
-
-      result when is_map(result) ->
-        has_all_fields(result, sub_fields)
-
-      _ ->
-        raise_fields_error()
-    end
-  end
-
-  defp process_fields(result, field) do
-    unless Map.has_key?(result, field) do
-      raise_fields_error()
-    end
-  end
-
-  @spec raise_fields_error :: no_return()
-  defp raise_fields_error, do: raise("All provided fields must be in result")
 end

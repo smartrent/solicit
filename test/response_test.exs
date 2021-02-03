@@ -12,15 +12,10 @@ defmodule Solicit.ResponseTest do
       |> json_response(:ok)
     end
 
-    test "Should return the correct shape" do
+    test "Should return entire result if fields are not passed" do
       response =
         build_conn()
-        |> Response.ok(%{records: [], current_page: 1, total_pages: 1, total_records: 0}, [
-          :records,
-          :current_page,
-          :total_pages,
-          :total_records
-        ])
+        |> Response.ok(%{records: [], current_page: 1, total_pages: 1, total_records: 0})
         |> json_response(:ok)
 
       assert response == %{
@@ -31,20 +26,21 @@ defmodule Solicit.ResponseTest do
              }
     end
 
-    test "Should raise error" do
-      assert_raise(RuntimeError, fn ->
-        Response.ok(
-          build_conn(),
-          %{records: [], current_page: 1, total_pages: 1, total_records: 0},
-          [
-            :records,
-            :current_page,
-            :total_pages,
-            :total_records,
-            :test
-          ]
-        )
-      end)
+    test "Should return on the fields passed" do
+      response =
+        build_conn()
+        |> Response.ok(%{records: [], current_page: 1, total_pages: 1, total_records: 0}, [
+          :records,
+          :total_pages,
+          :total_records
+        ])
+        |> json_response(:ok)
+
+      assert response == %{
+               "records" => [],
+               "total_pages" => 1,
+               "total_records" => 0
+             }
     end
   end
 
@@ -58,20 +54,17 @@ defmodule Solicit.ResponseTest do
       assert response == %{}
     end
 
-    test "Should raise error" do
-      assert_raise(RuntimeError, fn ->
-        Response.created(
-          build_conn(),
-          %{records: [], current_page: 1, total_pages: 1, total_records: 0},
-          [
-            :records,
-            :current_page,
-            :total_pages,
-            :total_records,
-            :test
-          ]
-        )
-      end)
+    test "Should return on the fields passed" do
+      response =
+        build_conn()
+        |> Response.created(%{license_plate: "Test", state: "VA"}, [
+          :license_plate
+        ])
+        |> json_response(:created)
+
+      assert response == %{
+               "license_plate" => "Test",
+             }
     end
   end
 
@@ -461,141 +454,6 @@ defmodule Solicit.ResponseTest do
                  }
                ]
              }
-    end
-  end
-
-  describe "has_all_fields" do
-    test "Should allow custom functional fields that are not in result" do
-      build_conn()
-      |> Response.ok(
-        %{records: [], current_page: 1, total_pages: 1, total_records: 0},
-        [
-          :records,
-          :current_page,
-          :total_pages,
-          :total_records,
-          test: fn _ -> "Test" end
-        ]
-      )
-      |> json_response(:ok)
-    end
-
-    test "Should return the correct shape for object and sub structure when defined" do
-      build_conn()
-      |> Response.ok(
-        %{
-          space_number: "Test",
-          vehicle: %{license_plate: "License Plate", state: "state"}
-        },
-        [
-          :space_number,
-          vehicle: [
-            :license_plate,
-            :state,
-            test: fn _ -> "Test" end
-          ]
-        ]
-      )
-      |> json_response(:ok)
-    end
-
-    test "Should allow nil values in the result " do
-      build_conn()
-      |> Response.ok(
-        %{
-          space_number: "Test",
-          vehicle: %{license_plate: "License Plate", state: nil}
-        },
-        [
-          :space_number,
-          vehicle: [
-            :license_plate,
-            :state,
-          ]
-        ]
-      )
-      |> json_response(:ok)
-    end
-
-
-    test "Should return the correct shape for a list of sub structures when defined" do
-      build_conn()
-      |> Response.ok(
-        %{
-          records: [
-            %{space_number: "Test", vehicles: [%{license_plate: "License Plate", state: "state"}]}
-          ],
-          current_page: 1,
-          total_pages: 1,
-          total_records: 0
-        },
-        [
-          :current_page,
-          :total_pages,
-          :total_records,
-          records: [
-            :space_number,
-            vehicles: [
-              :license_plate,
-              :state,
-              test: fn _ -> "Test" end
-            ]
-          ]
-        ]
-      )
-      |> json_response(:ok)
-    end
-
-    test "Should return the correct shape if substructure is not passed" do
-      build_conn()
-      |> Response.ok(
-        %{
-          records: [
-            %{space_number: "Test", vehicles: [%{license_plate: "License Plate", state: "state"}]}
-          ],
-          current_page: 1,
-          total_pages: 1,
-          total_records: 0
-        },
-        [
-          :current_page,
-          :total_pages,
-          :total_records,
-          records: [
-            :space_number,
-            :vehicles
-          ]
-        ]
-      )
-      |> json_response(:ok)
-    end
-
-    test "Should raise error for malformed fields when sub fields passed don't match result" do
-      assert_raise(RuntimeError, fn ->
-        Response.ok(
-          build_conn(),
-          %{
-            records: [
-              %{space_number: "Test", vehicle: "Test"}
-            ],
-            current_page: 1,
-            total_pages: 1,
-            total_records: 0
-          },
-          [
-            :current_page,
-            :total_pages,
-            :total_records,
-            records: [
-              :space_number,
-              vehicle: [
-                :license_plate,
-                :state
-              ]
-            ]
-          ]
-        )
-      end)
     end
   end
 end
