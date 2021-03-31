@@ -5,6 +5,8 @@ defmodule Solicit.ResponseTest do
 
   alias Solicit.Response
 
+  @custom_message "Custom message."
+
   describe "ok" do
     test "Should return 200" do
       build_conn()
@@ -63,7 +65,7 @@ defmodule Solicit.ResponseTest do
         |> json_response(:created)
 
       assert response == %{
-               "license_plate" => "Test",
+               "license_plate" => "Test"
              }
     end
   end
@@ -284,37 +286,91 @@ defmodule Solicit.ResponseTest do
 
   describe "gone" do
     test "Should return 410 with default error" do
-      response =
+      %{
+        "errors" => [
+          %{
+            "code" => "gone",
+            "description" => "Access to resource is no longer available."
+          }
+        ]
+      } =
         build_conn()
         |> Response.gone()
         |> json_response(:gone)
-
-      assert response == %{
-               "errors" => [
-                 %{
-                   "code" => "gone",
-                   "description" => "Access to resource is no longer available."
-                 }
-               ]
-             }
     end
 
     test "Should return 410 with custom error message" do
-      message = "Token expired."
-
-      response =
+      %{
+        "errors" => [
+          %{
+            "code" => "gone",
+            "description" => @custom_message
+          }
+        ]
+      } =
         build_conn()
-        |> Response.gone(message)
+        |> Response.gone(@custom_message)
         |> json_response(:gone)
+    end
+  end
 
-      assert response == %{
-               "errors" => [
-                 %{
-                   "code" => "gone",
-                   "description" => message
-                 }
-               ]
-             }
+  describe "request_entity_too_large" do
+    test "Should return 413 with default error" do
+      %{
+        "errors" => [
+          %{
+            "code" => "request_entity_too_large",
+            "description" => "Request entity is too large."
+          }
+        ]
+      } =
+        build_conn()
+        |> Response.request_entity_too_large()
+        |> json_response(:request_entity_too_large)
+    end
+
+    test "Should return 413 with custom error message" do
+      %{
+        "errors" => [
+          %{
+            "code" => "request_entity_too_large",
+            "description" => @custom_message
+          }
+        ]
+      } =
+        build_conn()
+        |> Response.request_entity_too_large(@custom_message)
+        |> json_response(:request_entity_too_large)
+    end
+  end
+
+  describe "unsupported_media_type" do
+    test "Should return 415 with default error" do
+      %{
+        "errors" => [
+          %{
+            "code" => "unsupported_media_type",
+            "description" => "Request contains an unsupported media type."
+          }
+        ]
+      } =
+        build_conn()
+        |> Response.unsupported_media_type()
+        |> json_response(:unsupported_media_type)
+    end
+
+    test "Should return 415 with custom error message" do
+      %{
+        "errors" => [
+          %{
+            "code" => "unsupported_media_type",
+            "description" => @custom_message
+          }
+        ]
+      } =
+        build_conn()
+        |> Response.unsupported_media_type(@custom_message)
+        |> json_response(:unsupported_media_type)
     end
   end
 

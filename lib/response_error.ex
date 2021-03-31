@@ -70,6 +70,14 @@ defmodule Solicit.ResponseError do
   def gone(description \\ "Access to resource is no longer available."),
     do: %ResponseError{code: :gone, description: description}
 
+  @spec request_entity_too_large(binary()) :: ResponseError.t()
+  def request_entity_too_large(description \\ "Request entity is too large."),
+    do: %ResponseError{code: :request_entity_too_large, description: description}
+
+  @spec unsupported_media_type(binary()) :: ResponseError.t()
+  def unsupported_media_type(description \\ "Request contains an unsupported media type."),
+    do: %ResponseError{code: :unsupported_media_type, description: description}
+
   @doc """
   Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
   """

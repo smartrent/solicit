@@ -239,6 +239,46 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 413
+  @doc """
+  Signifies a request_entity_too_large response.
+  """
+  @spec request_entity_too_large(Plug.Conn.t()) :: Plug.Conn.t()
+  def request_entity_too_large(conn) do
+    conn
+    |> put_status(:request_entity_too_large)
+    |> json(%{errors: [ResponseError.request_entity_too_large()]})
+    |> halt()
+  end
+
+  @spec request_entity_too_large(Plug.Conn.t(), binary()) :: Plug.Conn.t()
+  def request_entity_too_large(conn, description) do
+    conn
+    |> put_status(:request_entity_too_large)
+    |> json(%{errors: [ResponseError.request_entity_too_large(description)]})
+    |> halt()
+  end
+
+  # 415
+  @doc """
+  Signifies a unsupported_media_type response.
+  """
+  @spec unsupported_media_type(Plug.Conn.t()) :: Plug.Conn.t()
+  def unsupported_media_type(conn) do
+    conn
+    |> put_status(:unsupported_media_type)
+    |> json(%{errors: [ResponseError.unsupported_media_type()]})
+    |> halt()
+  end
+
+  @spec unsupported_media_type(Plug.Conn.t(), binary()) :: Plug.Conn.t()
+  def unsupported_media_type(conn, description) do
+    conn
+    |> put_status(:unsupported_media_type)
+    |> json(%{errors: [ResponseError.unsupported_media_type(description)]})
+    |> halt()
+  end
+
   # 422
   @doc """
   Signifies an unprocessable_entity response.
