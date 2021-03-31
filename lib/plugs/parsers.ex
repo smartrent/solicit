@@ -1,4 +1,10 @@
 defmodule Solicit.Plugs.Parsers do
+  @moduledoc """
+  Creates a wrapper around Plug.Parsers to catch Parsers Errors.
+
+  See Plug.Parsers documentation
+  """
+
   alias Plug.Parsers
 
   def init(opts), do: Parsers.init(opts)
