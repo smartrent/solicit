@@ -7,7 +7,7 @@ defmodule Solicit.Plugs.PaginationParamValidatorTest do
   describe "call" do
     test "offset and page provided, expect error" do
       build_conn(:get, "?offset=1&page=1")
-    |> Plug.Conn.fetch_query_params()
+      |> Plug.Conn.fetch_query_params()
       |> PaginationParamValidator.call(%{})
       |> json_response(:unprocessable_entity)
     end
@@ -72,6 +72,27 @@ defmodule Solicit.Plugs.PaginationParamValidatorTest do
       build_conn(:get, "?limit=-1")
       |> Plug.Conn.fetch_query_params()
       |> PaginationParamValidator.call(%{})
+      |> json_response(:unprocessable_entity)
+    end
+
+    test "limit exceeds default limit - (empty struct), expect error" do
+      build_conn(:get, "?limit=999999")
+      |> Plug.Conn.fetch_query_params()
+      |> PaginationParamValidator.call(%{})
+      |> json_response(:unprocessable_entity)
+    end
+
+    test "limit exceeds default limit - (no options), expect error" do
+      build_conn(:get, "?limit=999999")
+      |> Plug.Conn.fetch_query_params()
+      |> PaginationParamValidator.call(nil)
+      |> json_response(:unprocessable_entity)
+    end
+
+    test "limit exceeds custom limit, expect error" do
+      build_conn(:get, "?limit=11")
+      |> Plug.Conn.fetch_query_params()
+      |> PaginationParamValidator.call(%{limit: 10})
       |> json_response(:unprocessable_entity)
     end
 
