@@ -92,7 +92,7 @@ defmodule Solicit.Plugs.Validation.PaginationParamTest do
     test "limit exceeds custom limit, expect error" do
       build_conn(:get, "?limit=11")
       |> Plug.Conn.fetch_query_params()
-      |> PaginationParam.call([limit: 10])
+      |> PaginationParam.call(limit: 10)
       |> json_response(:unprocessable_entity)
     end
 

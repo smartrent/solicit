@@ -17,6 +17,8 @@ end
 ## Core Components
 
 - [Response](./md/response.md)
+- [Pagination Validator](./md/pagination.md)
+- [Query Param Validator](./md/query_param_validator.md)
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can

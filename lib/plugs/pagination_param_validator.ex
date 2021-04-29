@@ -67,6 +67,6 @@ defmodule Solicit.Plugs.Validation.PaginationParam do
   @spec get_max_limit(any()) :: number()
   defp get_max_limit(opts) when is_nil(opts), do: @max_limit
   defp get_max_limit(opts) when opts == [], do: @max_limit
-  defp get_max_limit([limit: limit]) when is_nil(limit), do: @max_limit
-  defp get_max_limit([limit: limit]), do: limit
+  defp get_max_limit(limit: limit) when is_nil(limit), do: @max_limit
+  defp get_max_limit(limit: limit), do: limit
 end
