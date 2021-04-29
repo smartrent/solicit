@@ -1,4 +1,4 @@
-defmodule Solicit.Plugs.QueryParamValidator do
+defmodule Solicit.Plugs.Validation.QueryParam do
   @moduledoc """
   Check to make sure that if a query parameter is provided that it has a value
 

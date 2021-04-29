@@ -1,4 +1,4 @@
-defmodule Solicit.Plugs.PaginationParamValidator do
+defmodule Solicit.Plugs.Validation.PaginationParam do
   @moduledoc """
   Check to make sure for an endpoint that allows for pagination that both the `offset` and `page` query parameter
   cannot be provided in the same call. It can only be 1 or the other.
