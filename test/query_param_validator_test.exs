@@ -9,21 +9,21 @@ defmodule Solicit.Plugs.Validation.QueryParamTest do
       build_conn(:get, "?test=")
       |> Plug.Conn.fetch_query_params()
       |> QueryParam.call(%{})
-      |> json_response(:bad_request)
+      |> json_response(:unprocessable_entity)
     end
 
     test "query params all are empty, expect error" do
       build_conn(:get, "?test=&foo=&bar=")
       |> Plug.Conn.fetch_query_params()
       |> QueryParam.call(%{})
-      |> json_response(:bad_request)
+      |> json_response(:unprocessable_entity)
     end
 
     test "query params some are empty, expect error" do
       build_conn(:get, "?test=123&foo=&bar=")
       |> Plug.Conn.fetch_query_params()
       |> QueryParam.call(%{})
-      |> json_response(:bad_request)
+      |> json_response(:unprocessable_entity)
     end
 
     test "query param not empty" do

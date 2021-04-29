@@ -12,4 +12,4 @@ If providing query parameters such as
 ```text
 GET /api?foo=
 ```
-we will return a `400 bad_request`
+we will return a `422 unprocessable_entity`
