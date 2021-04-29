@@ -9,8 +9,6 @@ defmodule Solicit.Plugs.Validation.PaginationParam do
   alias Plug.Conn
   alias Solicit.Response
 
-  @max_limit 1000
-
   @spec init(list()) :: list()
   def init(action), do: action
 
@@ -65,8 +63,8 @@ defmodule Solicit.Plugs.Validation.PaginationParam do
   defp is_valid_limit_value?(_, _), do: true
 
   @spec get_max_limit(any()) :: number()
-  defp get_max_limit(opts) when is_nil(opts), do: @max_limit
-  defp get_max_limit(opts) when opts == [], do: @max_limit
-  defp get_max_limit(limit: limit) when is_nil(limit), do: @max_limit
+  defp get_max_limit(opts) when is_nil(opts), do: Application.get_env(:solicit, :pagination_max_limit, 1000)
+  defp get_max_limit(opts) when opts == [], do: Application.get_env(:solicit, :pagination_max_limit, 1000)
+  defp get_max_limit(limit: limit) when is_nil(limit), do: Application.get_env(:solicit, :pagination_max_limit, 1000)
   defp get_max_limit(limit: limit), do: limit
 end
