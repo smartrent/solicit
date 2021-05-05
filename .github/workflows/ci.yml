@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  MIX_ENV: test
+
 jobs:
   build:
 
@@ -19,10 +22,15 @@ jobs:
       with:
         elixir-version: '1.11.4'
         otp-version: '23.3.2'
-    - name: Restore dependencies cache
+    - name: Restore dependencies and build cache
       uses: actions/cache@v2
       with:
-        path: deps
+        path: |
+          ~/.mix
+          _build
+          !_build/test/lib/solicit
+          deps
+          priv/plts
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
     - name: Install dependencies

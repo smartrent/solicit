@@ -44,7 +44,8 @@ defmodule Solicit.MixProject do
 
   defp dialyzer() do
     [
-      flags: [:unmatched_returns, :error_handling, :race_conditions]
+      flags: [:unmatched_returns, :error_handling, :race_conditions],
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 
