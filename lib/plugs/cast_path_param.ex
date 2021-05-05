@@ -18,7 +18,7 @@ defmodule Solicit.Plugs.CastPathParam do
           overwrite: boolean()
         ]
 
-  @spec init(keyword()) :: keyword()
+  @spec init(options()) :: options()
   def init(opts) do
     unless is_binary(Keyword.get(opts, :param)) do
       raise ":param is required and must be a string"
@@ -31,7 +31,7 @@ defmodule Solicit.Plugs.CastPathParam do
     opts
   end
 
-  @spec call(Plug.Conn.t(), keyword) :: Plug.Conn.t()
+  @spec call(Plug.Conn.t(), options()) :: Plug.Conn.t()
   def call(conn, opts) do
     param_name = Keyword.get(opts, :param)
     type = Keyword.get(opts, :type)
