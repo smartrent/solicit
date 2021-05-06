@@ -80,5 +80,5 @@ defmodule Solicit.Plugs.Validation.PaginationParams do
 
   @spec get_max_limit(keyword()) :: number()
   defp get_max_limit(opts),
-       do: Keyword.get(opts, :max_limit, Application.get_env(:solicit, :pagination_max_limit, 1000))
+    do: Keyword.get(opts, :max_limit, Application.get_env(:solicit, :pagination_max_limit, 1000))
 end
