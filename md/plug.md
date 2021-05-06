@@ -26,9 +26,9 @@ Example usage:
 
 ### Custom Limit Option
 
-You also have the option to define what you would like the `limit` ceiling to be
+You also have the option to define what you would like the `max_limit` ceiling to be
 when fetching records by passing an `option`
 
 ```elixir
-  plug(Solicit.Plugs.Validation.PaginationParam, [limit: 5])
+  plug(Solicit.Plugs.Validation.PaginationParam, [max_limit: 5])
 ```
