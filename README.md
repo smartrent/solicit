@@ -1,5 +1,7 @@
 # Solicit
 
+[![CI](https://github.com/smartrent/solicit/actions/workflows/ci.yml/badge.svg)](https://github.com/smartrent/solicit/actions/workflows/ci.yml)
+
 _Solicit_ is an Elixir package that provides basic API Response Handling.
 
 ## Installation
