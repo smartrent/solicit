@@ -55,7 +55,7 @@ GET /api
 
 If providing query parameters such as
 ```text
-GET /api?foo=bar=123
+GET /api?foo=&bar=123
 ```
 we will return the equivalent of
 ```text

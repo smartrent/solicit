@@ -5,21 +5,21 @@ defmodule Solicit.Plugs.Validation.QueryParamsTest do
   alias Solicit.Plugs.Validation.QueryParams
 
   describe "call" do
-    test "query param is empty, expect error" do
+    test "query param is empty, expect to be stripped out" do
       %{params: %{}, query_params: %{}} =
         build_conn(:get, "?test=")
         |> Plug.Conn.fetch_query_params()
         |> QueryParams.call(%{})
     end
 
-    test "query params all are empty, expect error" do
+    test "query params all are empty, expect to be stripped out" do
       %{params: %{}, query_params: %{}} =
         build_conn(:get, "?test=&foo=&bar=")
         |> Plug.Conn.fetch_query_params()
         |> QueryParams.call(%{})
     end
 
-    test "query params some are empty, expect error" do
+    test "query params some are empty, expect empty params to be stripped out" do
       %{params: %{"foo" => "123"}, query_params: %{"foo" => "123"}} =
         build_conn(:get, "?test=&foo=123&bar=")
         |> Plug.Conn.fetch_query_params()
