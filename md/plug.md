@@ -1,6 +1,6 @@
 # Plug
 
-## Pagination Param Validator
+## Pagination Params Validator
 
 Usage:
 
@@ -32,7 +32,7 @@ when fetching records by passing an `option`
 ```elixir
   plug(Solicit.Plugs.Validation.PaginationParam, [max_limit: 5])
 ```
-## Query Param Validator
+## Query Params Validator
 
 Usage:
 
