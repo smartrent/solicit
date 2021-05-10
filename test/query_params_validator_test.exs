@@ -27,13 +27,19 @@ defmodule Solicit.Plugs.Validation.QueryParamsTest do
     end
 
     test "query param not empty" do
-      conn = Plug.Conn.fetch_query_params(build_conn(:get, "?test=123"))
+      conn =
+        build_conn(:get, "?test=123")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
       assert conn == QueryParams.call(conn, %{})
     end
 
     test "query params not empty" do
       conn =
-        Plug.Conn.fetch_query_params(build_conn(:get, "?test=123&foo=abc123&bar=somestringhere"))
+        build_conn(:get, "?test=123&foo=abc123&bar=somestringhere")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
 
       assert conn == QueryParams.call(conn, %{})
     end

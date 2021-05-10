@@ -22,7 +22,7 @@ defmodule Solicit.Plugs.Validation.QueryParams do
 
     struct(conn,
       query_params: filtered_params,
-      params: filtered_params
+      params: filtered_params |> Map.merge(conn.body_params) |> Map.merge(conn.path_params)
     )
   end
 
