@@ -1,6 +1,6 @@
 # Plug
 
-## Pagination Param Validator
+## Pagination Params Validator
 
 Usage:
 
@@ -31,4 +31,33 @@ when fetching records by passing an `option`
 
 ```elixir
   plug(Solicit.Plugs.Validation.PaginationParam, [max_limit: 5])
+```
+## Query Params Validator
+
+Usage:
+
+This plug is used to validate query parameters have a value set.
+
+```elixir
+  plug(Solicit.Plugs.Validation.QueryParam)
+```
+
+Examples:
+
+If providing query parameters such as
+```text
+GET /api?foo=
+```
+we will return the equivalent of
+```text
+GET /api
+```
+
+If providing query parameters such as
+```text
+GET /api?foo=&bar=123
+```
+we will return the equivalent of
+```text
+GET /api?bar=123
 ```
