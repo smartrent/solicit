@@ -1,7 +1,7 @@
 defmodule Solicit.MixProject do
   use Mix.Project
 
-  @version "1.0.10"
+  @version "1.0.11"
 
   def project do
     [
