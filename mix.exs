@@ -56,6 +56,7 @@ defmodule Solicit.MixProject do
   defp package() do
     [
       # These are the default files included in the package
+      organization: "smartrent",
       files: ~w(lib mix.exs README*),
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/smartrent/solicit"}
