@@ -27,8 +27,6 @@ be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
 
 ## Publishing
 
-Using the `--organization` flag is important to keep the repository **private**.
-
 ```bash
-mix hex.publish --organization smartrent
+mix hex.publish
 ```
