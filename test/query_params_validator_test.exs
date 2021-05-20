@@ -44,6 +44,51 @@ defmodule Solicit.Plugs.Validation.QueryParamsTest do
       assert conn == QueryParams.call(conn, %{})
     end
 
+    test "query params is array - [] and has values" do
+      conn =
+        build_conn(:get, "?test[]=123&test[]=abc123")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert conn == QueryParams.call(conn, %{})
+    end
+
+    test "query params is array - [] and no values" do
+      conn =
+        build_conn(:get, "?test[]=&test[]=")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert conn == QueryParams.call(conn, %{})
+    end
+
+    test "query params is array - [] encoded and has a value" do
+      conn =
+        build_conn(:get, "?test=%5B1%5D")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert conn == QueryParams.call(conn, %{})
+    end
+
+    test "query params is array - [] encoded and no values" do
+      conn =
+        build_conn(:get, "?test=%5B%5D")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert conn == QueryParams.call(conn, %{})
+    end
+
+    test "query params is array - comma separated list" do
+      conn =
+        build_conn(:get, "?test=123,abc123")
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert conn == QueryParams.call(conn, %{})
+    end
+
     test "no query params" do
       conn = Plug.Conn.fetch_query_params(build_conn())
 
