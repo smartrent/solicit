@@ -27,6 +27,9 @@ be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
 
 ## Publishing
 
+1. Bump the version in `mix.exs`
+2. Run `mix hex.publish`
+
 ```bash
 mix hex.publish
 ```
