@@ -45,8 +45,3 @@ jobs:
       run: mix dialyzer
     - name: Run tests w/ coverage
       run: mix coveralls.html
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
