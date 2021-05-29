@@ -43,5 +43,5 @@ jobs:
       run: mix lint
     - name: Run Dialyzer
       run: mix dialyzer
-    - name: Run tests
-      run: mix test
+    - name: Run tests w/ coverage
+      run: mix coveralls.html
