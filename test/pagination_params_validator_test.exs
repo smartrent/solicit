@@ -121,7 +121,7 @@ defmodule Solicit.Plugs.Validation.PaginationParamssTest do
       %{
         test_scenario: "page and limit provided",
         value: "?page=1&limit=1"
-      },
+      }
     ]
 
     Enum.each(dataprovider, fn %{
