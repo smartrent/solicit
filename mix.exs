@@ -16,7 +16,6 @@ defmodule Solicit.MixProject do
       aliases: aliases(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        pipeline: :test,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
