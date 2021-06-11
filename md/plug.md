@@ -61,3 +61,37 @@ we will return the equivalent of
 ```text
 GET /api?bar=123
 ```
+
+## Body Params Empty Validator
+
+Usage:
+
+This plug is used to validate body parameters to not have a non-empty value set
+
+```elixir
+  plug(Solicit.Plugs.Validation.BodyParamsEmpty)
+```
+
+Examples:
+
+If providing body parameters such as 
+
+```json
+{
+  "key": ""
+}
+```
+
+we will return
+
+```json
+{
+  "errors": [
+    {
+      "code": "no_empty_values",
+      "description": "Cannot provide empty value for an attribute",
+      "field": null
+    }
+  ]
+}
+```

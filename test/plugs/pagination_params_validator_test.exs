@@ -1,4 +1,4 @@
-defmodule Solicit.Plugs.Validation.PaginationParamssTest do
+defmodule Solicit.Plugs.Validation.PaginationParamsTest do
   use ExUnit.Case, async: true
 
   import Phoenix.ConnTest
