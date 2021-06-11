@@ -92,6 +92,28 @@ defmodule Solicit.ResponseTest do
     end
   end
 
+  describe "accepted/3" do
+    test "Should return 202 with all fields by default" do
+      response =
+        build_conn()
+        |> Response.accepted(%{license_plate: "Test", state: "VA"})
+        |> json_response(:accepted)
+
+      assert response == %{"license_plate" => "Test", "state" => "VA"}
+    end
+
+    test "Should return 202 with defined fields" do
+      response =
+        build_conn()
+        |> Response.accepted(%{license_plate: "Test", state: "VA"}, [
+          :license_plate
+        ])
+        |> json_response(:accepted)
+
+      assert response == %{"license_plate" => "Test"}
+    end
+  end
+
   describe "no_content" do
     test "Should return 204" do
       assert Response.no_content(build_conn()).status == 204

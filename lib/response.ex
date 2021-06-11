@@ -63,6 +63,13 @@ defmodule Solicit.Response do
     |> json(%{details: details})
   end
 
+  @spec accepted(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
+  def accepted(conn, details, fields \\ nil) do
+    conn
+    |> put_status(:accepted)
+    |> json(as_json(details, fields))
+  end
+
   # 204
   @doc """
   Returns a successful no_content response. Normally used when deleting.

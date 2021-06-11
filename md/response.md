@@ -69,6 +69,25 @@ This is used for an accepted response. Normally used to signify that the request
 
 Returns `Plug.Conn.t()` with a status of `202` and the details passed in as the payload.
 
+### Response.accepted/3
+
+Usage:
+
+This is used for an accepted response. Normally used to signify that the request was accepted, but might not have finished processing.
+
+```elixir
+  Response.accepted(conn, %{license_plate: _, state: _}, fields)
+```
+
+Returns `Plug.Conn.t()` with a status of `202` and a payload of
+
+```elixir
+%{
+  "license_plate" => _,
+  "state" => _
+}
+```
+
 ### Response.no_content/1
 
 Usage:
