@@ -28,5 +28,6 @@ be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
 ## Publishing
 
 ```bash
-mix hex.publish
+mix git_ops.release    # bumps version, generates changelog, commits and tags
+mix hex.publish        # publishes to hex.pm
 ```

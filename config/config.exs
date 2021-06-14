@@ -26,4 +26,10 @@ if Mix.env() != :prod do
         ]
       ]
     ]
+
+  config :git_ops,
+    mix_project: Mix.Project.get!(),
+    changelog_file: "CHANGELOG.md",
+    repository_url: "https://github.com/smartrent/solicit",
+    manage_mix_version?: true
 end
