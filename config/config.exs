@@ -10,20 +10,19 @@ if Mix.env() != :prod do
     hooks: [
       pre_commit: [
         tasks: [
-          {:cmd, "mix format"},
-          {:cmd, "mix lint"},
-          {:cmd, "mix compile --warnings-as-errors"}
+          {:mix_task, :format},
+          {:mix_task, :lint},
+          {:mix_task, :compile, ["--warnings-as-errors"]}
         ]
       ],
       pre_push: [
         verbose: false,
         tasks: [
-          {:cmd, "mix format"},
-          {:cmd, "mix lint"},
-          {:cmd, "mix test"},
-          {:cmd, "mix compile --warnings-as-errors"},
-          {:cmd, "mix dialyzer"},
-          {:cmd, "echo 'success!'"}
+          {:mix_task, :format},
+          {:mix_task, :lint},
+          {:mix_task, :test},
+          {:mix_task, :compile, ["--warnings-as-errors"]},
+          {:mix_task, :dialyzer}
         ]
       ]
     ]
