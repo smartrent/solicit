@@ -12,7 +12,7 @@ defmodule Solicit.MixProject do
       deps: deps(),
       description: description(),
       package: package(),
-      dialyzer: dialyzer(),
+      dialyzer: dialyzer(Mix.env()),
       aliases: aliases(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
@@ -50,10 +50,12 @@ defmodule Solicit.MixProject do
     ]
   end
 
+  defp dialyzer(:dev), do: dialyzer()
+  defp dialyzer(_), do: dialyzer() ++ [plt_core_path: "_build"]
+
   defp dialyzer() do
     [
-      flags: [:unmatched_returns, :error_handling, :race_conditions],
-      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      flags: [:unmatched_returns, :error_handling, :race_conditions]
     ]
   end
 

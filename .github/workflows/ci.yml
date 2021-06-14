@@ -14,14 +14,23 @@ jobs:
 
     name: Build and test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - otp: 23.3
+            elixir: 1.11
+          - otp: 24.0
+            elixir: 1.12
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Elixir
-      uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+      uses: erlef/setup-beam@v1
       with:
-        elixir-version: '1.11.4'
-        otp-version: '23.3.2'
+        elixir-version: ${{matrix.elixir}}
+        otp-version: ${{matrix.otp}}
+
     - name: Restore dependencies and build cache
       uses: actions/cache@v2
       with:
@@ -31,17 +40,23 @@ jobs:
           !_build/test/lib/solicit
           deps
           priv/plts
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
+        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-
+
     - name: Install dependencies
       run: mix deps.get
+
     - name: Build
       run: mix compile --warnings-as-errors
+
     - name: Check formatting
       run: mix format --check-formatted
+
     - name: Lint
       run: mix lint
+
     - name: Run Dialyzer
       run: mix dialyzer
+
     - name: Run tests w/ coverage
       run: mix coveralls.html
