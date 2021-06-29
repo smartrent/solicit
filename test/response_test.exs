@@ -290,7 +290,9 @@ defmodule Solicit.ResponseTest do
         |> Response.conflict()
         |> json_response(:conflict)
 
-      assert response["errors"] == [%{"code" => "conflict", "description" => "A conflict has occurred."}]
+      assert response["errors"] == [
+               %{"code" => "conflict", "description" => "A conflict has occurred."}
+             ]
     end
 
     test "Should return 409 with custom errors" do
