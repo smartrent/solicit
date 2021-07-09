@@ -331,6 +331,13 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  def unprocessable_entity(conn, _errors) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{errors: [ResponseError.unprocessable_entity()]})
+    |> halt()
+  end
+
   @spec unprocessable_entity(Plug.Conn.t()) :: Plug.Conn.t()
   def unprocessable_entity(conn) do
     conn

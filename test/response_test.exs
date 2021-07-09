@@ -460,6 +460,22 @@ defmodule Solicit.ResponseTest do
                ]
              }
     end
+
+    test "Should return base 422 messaging if provided a bad 2nd argument" do
+      response =
+        build_conn()
+        |> Response.unprocessable_entity(nil)
+        |> json_response(:unprocessable_entity)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "Unable to process change."
+                 }
+               ]
+             }
+    end
   end
 
   describe "too_many_requests" do
