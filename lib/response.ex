@@ -211,6 +211,14 @@ defmodule Solicit.Response do
   @doc """
   Signifies a conflicting response.
   """
+  @spec conflict(Plug.Conn.t()) :: Plug.Conn.t()
+  def conflict(conn) do
+    conn
+    |> put_status(:conflict)
+    |> json(%{errors: [ResponseError.conflict()]})
+    |> halt()
+  end
+
   @spec conflict(Plug.Conn.t(), list() | binary()) :: Plug.Conn.t()
   def conflict(conn, errors) when is_list(errors) do
     conn

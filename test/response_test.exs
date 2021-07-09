@@ -284,6 +284,17 @@ defmodule Solicit.ResponseTest do
       assert response["errors"] == [%{"code" => "conflict", "description" => "test"}]
     end
 
+    test "Should return 409 with default message" do
+      response =
+        build_conn()
+        |> Response.conflict()
+        |> json_response(:conflict)
+
+      assert response["errors"] == [
+               %{"code" => "conflict", "description" => "A conflict has occurred."}
+             ]
+    end
+
     test "Should return 409 with custom errors" do
       response =
         build_conn()

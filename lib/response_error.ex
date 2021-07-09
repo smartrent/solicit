@@ -38,7 +38,7 @@ defmodule Solicit.ResponseError do
       do: %ResponseError{code: :unprocessable_entity, description: description}
 
   @spec conflict(binary()) :: ResponseError.t()
-  def conflict(description) when is_binary(description),
+  def conflict(description \\ "A conflict has occurred."),
     do: %ResponseError{code: :conflict, description: description}
 
   @spec unauthorized(binary()) :: ResponseError.t()
