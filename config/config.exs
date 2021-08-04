@@ -3,7 +3,7 @@ use Mix.Config
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-if Mix.env() != :prod do
+if Mix.env() == :dev do
   config :git_hooks,
     auto_install: true,
     verbose: true,
