@@ -118,19 +118,19 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
   defp validate_dates_payload(%{"start_at" => start_at, "end_at" => end_at})
        when not is_nil(start_at) and not is_nil(end_at) do
     case DateHelper.validate_start_and_end_datetime(start_at, end_at) do
-      {:error, :invalid_start_at} ->
+      {:error, :invalid_start_date} ->
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse start_at",
+           description: "failed to parse start date",
            field: "start_at"
          }}
 
-      {:error, :invalid_end_at} ->
+      {:error, :invalid_end_date} ->
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse end_at",
+           description: "failed to parse end date",
            field: "end_at"
          }}
 
@@ -138,7 +138,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "start_at must be before end_at",
+           description: "start date must be before end date",
            field: "start_at"
          }}
 
@@ -146,7 +146,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "end_at must be in the future",
+           description: "end date must be in the future",
            field: "end_at"
          }}
 

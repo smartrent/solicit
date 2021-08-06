@@ -47,7 +47,7 @@ defmodule DateHelper do
   @spec validate_start_and_end_datetime(String.t() | nil, String.t() | nil) ::
           :ok
           | {:error,
-            :end_before_now | :invalid_end_date | :invalid_start_date | :start_before_end}
+             :end_before_now | :invalid_end_date | :invalid_start_date | :start_before_end}
   def validate_start_and_end_datetime(start_date, end_date)
       when is_binary(start_date) and is_binary(end_date) do
     validate_start_and_end_datetime(start_date, end_date, "{ISO:Extended:Z}")
@@ -66,7 +66,7 @@ defmodule DateHelper do
   @spec validate_start_and_end_datetime(String.t() | nil, String.t() | nil, String.t()) ::
           :ok
           | {:error,
-            :end_before_now | :invalid_end_date | :invalid_start_date | :start_before_end}
+             :end_before_now | :invalid_end_date | :invalid_start_date | :start_before_end}
   def validate_start_and_end_datetime(start_date, end_date, time_format)
       when is_binary(start_date) and is_binary(end_date) do
     with {_, {:ok, start_date_time}} <-
