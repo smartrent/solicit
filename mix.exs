@@ -43,7 +43,7 @@ defmodule Solicit.MixProject do
       {:phoenix, "~> 1.4"},
       {:plug_cowboy, ">= 1.0.0"},
       {:postgrex, ">= 0.0.0"},
-      {:timex, "~> 3.6.4"}
+      {:timex, "~> 3.6"}
     ]
   end
 
