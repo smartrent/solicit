@@ -232,9 +232,9 @@ defmodule Solicit.Plugs.Validation.DateBodyParamsTest do
              } =
                :post
                |> build_conn("/",
-                    start_at: "2021-08-03T00:00:00.000Z",
-                    end_at: "2021-08-02T00:00:00.000Z"
-                  )
+                 start_at: "2021-08-03T00:00:00.000Z",
+                 end_at: "2021-08-02T00:00:00.000Z"
+               )
                |> DateBodyParams.call([])
                |> json_response(:unprocessable_entity)
     end
