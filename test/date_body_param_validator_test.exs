@@ -10,13 +10,45 @@ defmodule Solicit.Plugs.Validation.DateBodyParamsTest do
                "errors" => [
                  %{
                    "code" => "unprocessable_entity",
-                   "description" => "failed to parse start_date",
+                   "description" => "failed to parse start date",
                    "field" => "start_date"
                  }
                ]
              } =
                :post
                |> build_conn("/", start_date: "john")
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "invalid start_date format given end_date, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "failed to parse start date",
+                   "field" => "start_date"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/", start_date: "john", end_date: "2021-08-03T00:00:00.000Z")
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "invalid end_date format, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "failed to parse end date",
+                   "field" => "end_date"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/", start_date: "2021-08-03T00:00:00.000Z", end_date: "john")
                |> DateBodyParams.call([])
                |> json_response(:unprocessable_entity)
     end
@@ -42,13 +74,45 @@ defmodule Solicit.Plugs.Validation.DateBodyParamsTest do
                "errors" => [
                  %{
                    "code" => "unprocessable_entity",
-                   "description" => "failed to parse start_at",
+                   "description" => "failed to parse start date",
                    "field" => "start_at"
                  }
                ]
              } =
                :post
                |> build_conn("/", start_at: "john")
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "invalid start_at format given end_at, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "failed to parse start date",
+                   "field" => "start_at"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/", start_at: "john", end_at: "2021-08-03T00:00:00.000Z")
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "invalid end_at format, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "failed to parse end date",
+                   "field" => "end_at"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/", start_at: "2021-08-03T00:00:00.000Z", end_at: "john")
                |> DateBodyParams.call([])
                |> json_response(:unprocessable_entity)
     end
@@ -74,7 +138,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParamsTest do
                "errors" => [
                  %{
                    "code" => "unprocessable_entity",
-                   "description" => "failed to parse end_date",
+                   "description" => "failed to parse end date",
                    "field" => "end_date"
                  }
                ]
@@ -97,6 +161,82 @@ defmodule Solicit.Plugs.Validation.DateBodyParamsTest do
                :post
                |> build_conn("/", start_at: "2021-08-03T00:00:00.000Z")
                |> DateBodyParams.call([])
+    end
+
+    test "end_date is before now, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "end date must be in the future",
+                   "field" => "end_date"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/",
+                 start_date: "2021-08-02T00:00:00.000Z",
+                 end_date: "2021-08-03T00:00:00.000Z"
+               )
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "end_at is before now, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "end date must be in the future",
+                   "field" => "end_at"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/",
+                 start_at: "2021-08-02T00:00:00.000Z",
+                 end_at: "2021-08-03T00:00:00.000Z"
+               )
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "start_date after end_date, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "start date must be before end date",
+                   "field" => "start_date"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/",
+                 start_date: "2021-08-03T00:00:00.000Z",
+                 end_date: "2021-08-02T00:00:00.000Z"
+               )
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
+    end
+
+    test "start_at after end_at, expect error" do
+      assert %{
+               "errors" => [
+                 %{
+                   "code" => "unprocessable_entity",
+                   "description" => "start date must be before end date",
+                   "field" => "start_at"
+                 }
+               ]
+             } =
+               :post
+               |> build_conn("/",
+                    start_at: "2021-08-03T00:00:00.000Z",
+                    end_at: "2021-08-02T00:00:00.000Z"
+                  )
+               |> DateBodyParams.call([])
+               |> json_response(:unprocessable_entity)
     end
   end
 end

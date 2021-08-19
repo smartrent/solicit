@@ -43,7 +43,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse start_date",
+           description: "failed to parse start date",
            field: "start_date"
          }}
 
@@ -51,7 +51,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse end_date",
+           description: "failed to parse end date",
            field: "end_date"
          }}
 
@@ -59,7 +59,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "start_date must be before end_date",
+           description: "start date must be before end date",
            field: "start_date"
          }}
 
@@ -67,7 +67,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "end_date must be in the future",
+           description: "end date must be in the future",
            field: "end_date"
          }}
 
@@ -95,7 +95,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse start_date",
+           description: "failed to parse start date",
            field: "start_date"
          }}
     end
@@ -174,7 +174,7 @@ defmodule Solicit.Plugs.Validation.DateBodyParams do
         {:error,
          %{
            code: :unprocessable_entity,
-           description: "failed to parse start_at",
+           description: "failed to parse start date",
            field: "start_at"
          }}
     end
