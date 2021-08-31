@@ -471,6 +471,14 @@ defmodule Solicit.Response do
 
   def as_json(nil, _fields), do: nil
 
+  def as_json(list, fields) when is_list(list) do
+    list
+    |> Task.async_stream(&as_json(&1, fields))
+    |> Stream.filter(&match?({:ok, _}, &1))
+    |> Stream.map(&elem(&1, 1))
+    |> Enum.to_list()
+  end
+
   def as_json(struct, fields) do
     Enum.reduce(fields, %{}, fn field, acc ->
       {field, value} =

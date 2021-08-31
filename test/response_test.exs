@@ -14,6 +14,24 @@ defmodule Solicit.ResponseTest do
       |> json_response(:ok)
     end
 
+    test "Should take list and return 200" do
+      response =
+        build_conn()
+        |> Response.ok([%{ step: 0, name: "test"}, %{ step: 1, name: "test 2"}, %{ step: 2, name: "test 3"}], nil)
+        |> json_response(:ok)
+
+      assert response == [%{
+        "step" => 0,
+        "name" => "test"
+      }, %{
+        "step" => 1,
+        "name" => "test 2"
+      }, %{
+        "step" => 2,
+        "name" => "test 3"
+      }]
+    end
+
     test "Should return entire result if fields are not passed" do
       response =
         build_conn()
