@@ -500,13 +500,7 @@ defmodule Solicit.Response do
   defp convert_struct(nil, _field), do: nil
 
   defp convert_struct(struct, field) do
-    case Map.get(struct, field) do
-      %DateTime{} = datetime ->
-        {field, DateTime.to_string(datetime)}
-
-      value ->
-        {field, value}
-    end
+    {field, Map.get(struct, field)}
   end
 
   defp convert_assoc_struct(struct, field, assoc_fields) do

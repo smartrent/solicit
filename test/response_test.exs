@@ -44,6 +44,19 @@ defmodule Solicit.ResponseTest do
                "total_records" => 0
              }
     end
+
+    test "Should return datetime as ISO string" do
+      {:ok, date} = DateTime.new(~D[2016-05-24], ~T[13:26:08.003])
+
+      response =
+        build_conn()
+        |> Response.ok(%{date: date}, [:date])
+        |> json_response(:ok)
+
+      assert response == %{
+               "date" => "2016-05-24T13:26:08.003Z"
+             }
+    end
   end
 
   describe "created" do
