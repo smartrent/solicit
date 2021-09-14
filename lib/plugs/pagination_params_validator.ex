@@ -19,17 +19,17 @@ defmodule Solicit.Plugs.Validation.PaginationParams do
     page = Map.get(params, "page")
     limit = Map.get(params, "limit")
 
-    if is_valid_limit_value?(limit, max_limit) do
-      if pagination_params_valid?(offset, page) do
+    if pagination_params_valid?(offset, page) do
+      if is_valid_limit_value?(limit, max_limit) do
         conn
       else
-        Response.unprocessable_entity(conn)
+        struct(conn,
+          query_params: Map.put(conn.query_params, "limit", max_limit),
+          params: Map.put(conn.params, "limit", max_limit)
+        )
       end
     else
-      struct(conn,
-        query_params: Map.put(conn.query_params, "limit", max_limit),
-        params: Map.put(conn.params, "limit", max_limit)
-      )
+      Response.unprocessable_entity(conn)
     end
   end
 
