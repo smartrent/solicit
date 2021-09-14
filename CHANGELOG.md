@@ -5,6 +5,17 @@ See [Conventional Commits](Https://conventionalcommits.org) for commit guideline
 
 <!-- changelog -->
 
+## [1.1.1](https://github.com/smartrent/solicit/compare/1.1.0...1.1.1) (2021-09-14)
+
+
+
+
+### Bug Fixes:
+
+* error when negative page and negative limit provided (#46)
+
+
+
 ## [1.1.0](https://github.com/smartrent/solicit/compare/1.0.15...1.1.0) (2021-09-07)
 
 
