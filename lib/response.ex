@@ -386,6 +386,60 @@ defmodule Solicit.Response do
     |> halt()
   end
 
+  # 502
+  @doc """
+  Signifies a bad gateway request.
+  """
+  @spec bad_gateway(Plug.Conn.t(), binary() | list()) :: Plug.Conn.t()
+  def bad_gateway(conn, message) when is_binary(message) do
+    conn
+    |> put_status(:bad_gateway)
+    |> json(%{errors: [message]})
+    |> halt()
+  end
+
+  def bad_gateway(conn, errors) when is_list(errors) do
+    conn
+    |> put_status(:bad_gateway)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  @spec bad_gateway(Plug.Conn.t()) :: Plug.Conn.t()
+  def bad_gateway(conn) do
+    conn
+    |> put_status(:bad_gateway)
+    |> json(%{errors: [ResponseError.bad_gateway()]})
+    |> halt()
+  end
+
+  # 503
+  @doc """
+  Signifies a service unavailable request.
+  """
+  @spec service_unavailable(Plug.Conn.t(), binary() | list()) :: Plug.Conn.t()
+  def service_unavailable(conn, message) when is_binary(message) do
+    conn
+    |> put_status(:service_unavailable)
+    |> json(%{errors: [message]})
+    |> halt()
+  end
+
+  def service_unavailable(conn, errors) when is_list(errors) do
+    conn
+    |> put_status(:service_unavailable)
+    |> json(%{errors: errors})
+    |> halt()
+  end
+
+  @spec service_unavailable(Plug.Conn.t()) :: Plug.Conn.t()
+  def service_unavailable(conn) do
+    conn
+    |> put_status(:service_unavailable)
+    |> json(%{errors: [ResponseError.service_unavailable()]})
+    |> halt()
+  end
+
   @doc """
   Returns structs or maps with specific fields extracted.
 
