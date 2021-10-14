@@ -558,4 +558,100 @@ defmodule Solicit.ResponseTest do
              }
     end
   end
+
+  describe "bad_gateway" do
+    test "Should return 502" do
+      response =
+        build_conn()
+        |> Response.bad_gateway("test")
+        |> json_response(:bad_gateway)
+
+      assert response["errors"] == ["test"]
+    end
+
+    test "Should return base 502 error" do
+      response =
+        build_conn()
+        |> Response.bad_gateway()
+        |> json_response(:bad_gateway)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "bad_gateway",
+                   "description" => "Bad Gateway"
+                 }
+               ]
+             }
+    end
+
+    test "Should return custom 502 errors" do
+      response =
+        build_conn()
+        |> Response.bad_gateway([
+          %{
+            code: "bad_gateway",
+            description: "This was an error"
+          }
+        ])
+        |> json_response(:bad_gateway)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "bad_gateway",
+                   "description" => "This was an error"
+                 }
+               ]
+             }
+    end
+  end
+
+  describe "service_unavailable" do
+    test "Should return 503" do
+      response =
+        build_conn()
+        |> Response.service_unavailable("test")
+        |> json_response(:service_unavailable)
+
+      assert response["errors"] == ["test"]
+    end
+
+    test "Should return base 503 error" do
+      response =
+        build_conn()
+        |> Response.service_unavailable()
+        |> json_response(:service_unavailable)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "service_unavailable",
+                   "description" => "Service Unavailable"
+                 }
+               ]
+             }
+    end
+
+    test "Should return custom 503 errors" do
+      response =
+        build_conn()
+        |> Response.service_unavailable([
+          %{
+            code: "service_unavailable",
+            description: "This was an error"
+          }
+        ])
+        |> json_response(:service_unavailable)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "service_unavailable",
+                   "description" => "This was an error"
+                 }
+               ]
+             }
+    end
+  end
 end
