@@ -394,7 +394,7 @@ defmodule Solicit.Response do
   def bad_gateway(conn, message) when is_binary(message) do
     conn
     |> put_status(:bad_gateway)
-    |> json(%{errors: [message]})
+    |> json(%{errors: [ResponseError.bad_gateway(message)]})
     |> halt()
   end
 
