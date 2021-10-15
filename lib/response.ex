@@ -390,7 +390,7 @@ defmodule Solicit.Response do
   @doc """
   Signifies a bad gateway request.
   """
-  @spec bad_gateway(Plug.Conn.t(), binary() | list()) :: Plug.Conn.t()
+  @spec bad_gateway(Plug.Conn.t(), binary() | list(ResponseError.t())) :: Plug.Conn.t()
   def bad_gateway(conn, message) when is_binary(message) do
     conn
     |> put_status(:bad_gateway)
