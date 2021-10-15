@@ -417,7 +417,7 @@ defmodule Solicit.Response do
   @doc """
   Signifies a service unavailable request.
   """
-  @spec service_unavailable(Plug.Conn.t(), binary() | list()) :: Plug.Conn.t()
+  @spec service_unavailable(Plug.Conn.t(), binary() | list(ResponseError.t())) :: Plug.Conn.t()
   def service_unavailable(conn, message) when is_binary(message) do
     conn
     |> put_status(:service_unavailable)
