@@ -566,7 +566,7 @@ defmodule Solicit.ResponseTest do
         |> Response.bad_gateway("test")
         |> json_response(:bad_gateway)
 
-      assert response["errors"] == ["test"]
+      assert response["errors"] == [%{"code" => "bad_gateway", "description" => "test"}]
     end
 
     test "Should return base 502 error" do
@@ -614,7 +614,9 @@ defmodule Solicit.ResponseTest do
         |> Response.service_unavailable("test")
         |> json_response(:service_unavailable)
 
-      assert response["errors"] == ["test"]
+      assert response["errors"] == [
+               %{"code" => "service_unavailable", "description" => "test"}
+             ]
     end
 
     test "Should return base 503 error" do

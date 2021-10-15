@@ -421,7 +421,7 @@ defmodule Solicit.Response do
   def service_unavailable(conn, message) when is_binary(message) do
     conn
     |> put_status(:service_unavailable)
-    |> json(%{errors: [ResponseError.service_unavailable()]})
+    |> json(%{errors: [ResponseError.service_unavailable(message)]})
     |> halt()
   end
 
