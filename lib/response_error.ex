@@ -59,6 +59,14 @@ defmodule Solicit.ResponseError do
   def internal_server_error(description \\ "Internal Server Error"),
     do: %ResponseError{code: :internal_server_error, description: description}
 
+  @spec bad_gateway(binary()) :: ResponseError.t()
+  def bad_gateway(description \\ "Bad Gateway"),
+    do: %ResponseError{code: :bad_gateway, description: description}
+
+  @spec service_unavailable(binary()) :: ResponseError.t()
+  def service_unavailable(description \\ "Service Unavailable"),
+    do: %ResponseError{code: :service_unavailable, description: description}
+
   @spec too_many_requests(binary()) :: ResponseError.t()
   def too_many_requests(description \\ "Exceeded request threshold."),
     do: %ResponseError{
