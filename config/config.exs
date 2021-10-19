@@ -24,6 +24,11 @@ if Mix.env() == :dev do
           {:mix_task, :compile, ["--warnings-as-errors"]},
           {:mix_task, :dialyzer}
         ]
+      ],
+      commit_msg: [
+        tasks: [
+          {:cmd, "mix git_ops.check_message", include_hook_args: true}
+        ]
       ]
     ]
 
