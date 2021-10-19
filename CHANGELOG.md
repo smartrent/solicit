@@ -5,6 +5,15 @@ See [Conventional Commits](Https://conventionalcommits.org) for commit guideline
 
 <!-- changelog -->
 
+## [1.2.0](https://github.com/smartrent/solicit/compare/1.1.1...1.2.0) (2021-10-19)
+
+
+
+
+### Features:
+
+* add 502 and 503 responses (#48)
+
 ## [1.1.1](https://github.com/smartrent/solicit/compare/1.1.0...1.1.1) (2021-09-14)
 
 
