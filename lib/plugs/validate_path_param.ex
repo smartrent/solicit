@@ -2,22 +2,32 @@ defmodule Solicit.Plugs.ValidatePathParam do
   @moduledoc """
   Casts the given path param to the given type. If the cast fails, returns a 404.
   Uses Solicit for 404 responses, so only API routes are supported.
+
+  ## Usage
+
+  ```
+  plug Solicit.Plugs.ValidatePathParam,
+       param: "user_id",
+       type: :integer,
+       required: true
+  ```
+
+  ### Options
+
+  * `:param` - the string name of the parameter to be cast. **Required.**
+  * `:type` - the type to cast to using `Ecto.Type.cast/2`. **Required.**
+  * `:required` - if true, requires the parameter to not be nil or an empty string after
+    casting. **Default:** `true`.
   """
 
-  @typedoc """
-  Plug options.
-
-  - `:param` - the string name of the parameter to be cast. **Required.**
-  - `:type` - the type to cast to using `Ecto.Type.cast/2`. **Required.**
-  - `:required` - if true, requires the parameter to not be nil or an empty string after
-                  casting. **Default:** `true`.
-  """
+  @typedoc "Plug options."
   @type options :: [
           param: binary(),
           type: Ecto.Type.t(),
           required: boolean()
         ]
 
+  @doc false
   @spec init(keyword()) :: keyword()
   def init(opts) do
     unless is_binary(Keyword.get(opts, :param)) do
@@ -31,6 +41,7 @@ defmodule Solicit.Plugs.ValidatePathParam do
     opts
   end
 
+  @doc false
   @spec call(Plug.Conn.t(), keyword) :: Plug.Conn.t()
   def call(conn, opts) do
     param_name = Keyword.get(opts, :param)

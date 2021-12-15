@@ -1,14 +1,21 @@
 defmodule Solicit.Plugs.Parsers do
   @moduledoc """
-  Creates a wrapper around Plug.Parsers to catch Parsers Errors.
+  Wraps `Plug.Parsers` and rescues from the following errors:
 
-  See Plug.Parsers documentation
+  * `Parsers.ParseError` - 400 Bad Request
+  * `Parsers.BadEncodingError` - 400 Bad Request
+  * `Parsers.RequestTooLargeError` - 413 Request Entity Too Large
+  * `Parsers.UnsupportedMediaTypeError` - 415 Unsupported Media Type
+
+  See `Plug.Parsers`.
   """
 
   alias Plug.Parsers
 
+  @doc false
   def init(opts), do: Parsers.init(opts)
 
+  @doc false
   def call(conn, options) do
     Parsers.call(conn, options)
   rescue

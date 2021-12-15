@@ -1,17 +1,35 @@
-defmodule Solicit.Plugs.Validation.PaginationParams do
+defmodule Solicit.Plugs.ValidatePaginationParams do
   @moduledoc """
-  Check to make sure for an endpoint that allows for pagination that both the `offset` and `page` query parameter
-  cannot be provided in the same call. It can only be 1 or the other.
+  Validates pagination parameters in the request's query string.
 
-  Also that the provided `offset`, `page`, and `limit` are valid values
+  ## Validation Rules
+
+  * `offset` and `page` parameters are mutually exclusive
+  * `offset` must be a non-negative integer (>= 0)
+  * `page` must be a positive integer (>= 1)
+  * `limit` must be an integer less than or equal to the value of the `max_limit`
+    option.
+
+  All parameters are optional.
+
+  With the exception of `limit`, invalid input will result in a 422 Unprocessable Entity.
+  If `limit` cannot be parsed or is larger than `max_limit`, it will be replaced with
+  the value of `max_limit`.
+
+  ## Plug Options
+  * `:max_limit` - the largest allowed value for the `limit` query string parameter
   """
 
   alias Plug.Conn
   alias Solicit.Response
 
+  @type opts :: [max_limit: pos_integer()]
+
+  @doc false
   @spec init(keyword()) :: keyword()
   def init(opts \\ []), do: opts
 
+  @doc false
   @spec call(Conn.t(), keyword()) :: Plug.Conn.t()
   def call(%{query_params: params} = conn, opts) do
     max_limit = get_max_limit(opts)

@@ -229,7 +229,7 @@ defmodule Solicit.ResponseTest do
         |> json_response(:method_not_allowed)
 
       assert response["errors"] == [
-               %{"code" => "method_not_allowed", "description" => "Method is not allowed."}
+               %{"code" => "method_not_allowed", "description" => "Method is not allowed"}
              ]
     end
 
@@ -262,7 +262,9 @@ defmodule Solicit.ResponseTest do
         |> Response.timeout()
         |> json_response(:request_timeout)
 
-      assert response["errors"] == [%{"code" => "timeout", "description" => "Request timed out."}]
+      assert response["errors"] == [
+               %{"code" => "request_timeout", "description" => "Request Timeout"}
+             ]
     end
 
     test "Should return 408 with custom errors" do
@@ -304,7 +306,7 @@ defmodule Solicit.ResponseTest do
         |> json_response(:conflict)
 
       assert response["errors"] == [
-               %{"code" => "conflict", "description" => "A conflict has occurred."}
+               %{"code" => "conflict", "description" => "A conflict has occurred"}
              ]
     end
 
@@ -336,7 +338,7 @@ defmodule Solicit.ResponseTest do
         "errors" => [
           %{
             "code" => "gone",
-            "description" => "Access to resource is no longer available."
+            "description" => "Access to resource is no longer available"
           }
         ]
       } =
@@ -366,7 +368,7 @@ defmodule Solicit.ResponseTest do
         "errors" => [
           %{
             "code" => "request_entity_too_large",
-            "description" => "Request entity is too large."
+            "description" => "Request entity is too large"
           }
         ]
       } =
@@ -396,7 +398,7 @@ defmodule Solicit.ResponseTest do
         "errors" => [
           %{
             "code" => "unsupported_media_type",
-            "description" => "Request contains an unsupported media type."
+            "description" => "Request contains an unsupported media type"
           }
         ]
       } =
@@ -486,7 +488,7 @@ defmodule Solicit.ResponseTest do
                "errors" => [
                  %{
                    "code" => "too_many_requests",
-                   "description" => "Exceeded request threshold."
+                   "description" => "Exceeded request threshold"
                  }
                ]
              }

@@ -1,96 +1,112 @@
+defmodule Solicit.ResponseError.Generator do
+  @moduledoc false
+
+  defmacro __using__(opts \\ []) do
+    status_codes = Keyword.get(opts, :status_codes, [])
+    descriptions = Keyword.get(opts, :descriptions, %{})
+
+    quote bind_quoted: [
+            status_codes: status_codes,
+            descriptions: descriptions,
+            module: __MODULE__
+          ] do
+      @status_codes Enum.flat_map(status_codes, & &1)
+      @descriptions descriptions
+      @before_compile module
+    end
+  end
+
+  defmacro __before_compile__(env) do
+    status_codes = Module.get_attribute(env.module, :status_codes, [])
+    descriptions = Module.get_attribute(env.module, :descriptions, %{})
+
+    Enum.map(status_codes, fn status_code ->
+      %{
+        reason_atom: reason_atom,
+        reason_phrase: reason_phrase,
+        spec_title: spec_title,
+        spec_href: spec_href,
+        docs: docs
+      } = Solicit.HTTP.StatusCodes.metadata(status_code)
+
+      default_description = Map.get(descriptions, status_code, reason_phrase)
+
+      quote do
+        @doc """
+        #{unquote(status_code)} #{unquote(reason_phrase)}
+
+        #{unquote(docs)}
+
+        * [#{unquote(spec_title)}](#{unquote(spec_href)})
+        """
+        @spec unquote(reason_atom)(String.t()) :: t()
+        def unquote(reason_atom)(description \\ unquote(default_description)) do
+          new(unquote(reason_atom), description)
+        end
+      end
+    end)
+  end
+end
+
 defmodule Solicit.ResponseError do
   @moduledoc """
-  An error in the JSON body of an HTTP response.
+  Represents an error in the JSON body of an HTTP response.
+
+  Use `Solicit.ResponseError.new/3` to create an error with a custom code, description,
+  and optional field.
   """
 
-  alias Ecto.Changeset
-  alias __MODULE__
+  use Solicit.ResponseError.Generator,
+    status_codes: [400..418, 421..422, 429..429, 451..451, 500..504],
+    descriptions: %{
+      401 => "Must include valid Authorization credentials",
+      405 => "Method is not allowed",
+      409 => "A conflict has occurred",
+      410 => "Access to resource is no longer available",
+      413 => "Request entity is too large",
+      415 => "Request contains an unsupported media type",
+      422 => "Unable to process change",
+      429 => "Exceeded request threshold"
+    }
 
+  @enforce_keys [:code, :description]
   defstruct code: "",
             description: "",
             field: nil
 
-  @type t :: %__MODULE__{}
+  @type code :: String.t() | atom()
+  @type field :: String.t() | atom()
+  @type description :: String.t()
 
-  @spec generic_error(binary()) :: ResponseError.t()
-  def generic_error(description \\ "An unknown error occurred."),
-    do: %ResponseError{code: :error, description: description}
-
-  @spec bad_request(binary()) :: ResponseError.t()
-  def bad_request(description \\ "Bad request."),
-    do: %ResponseError{code: :bad_request, description: description}
-
-  @spec forbidden(binary()) :: ResponseError.t()
-  def forbidden(description \\ "This action is forbidden."),
-    do: %ResponseError{code: :forbidden, description: description}
-
-  @spec not_found(binary()) :: ResponseError.t()
-  def not_found(description \\ "The resource was not found."),
-    do: %ResponseError{code: :not_found, description: description}
-
-  @spec timeout(binary()) :: ResponseError.t()
-  def timeout(description \\ "Request timed out."),
-    do: %ResponseError{code: :timeout, description: description}
-
-  @spec unprocessable_entity(binary()) :: ResponseError.t()
-  def unprocessable_entity(description \\ "Unable to process change.")
-      when is_binary(description),
-      do: %ResponseError{code: :unprocessable_entity, description: description}
-
-  @spec conflict(binary()) :: ResponseError.t()
-  def conflict(description \\ "A conflict has occurred."),
-    do: %ResponseError{code: :conflict, description: description}
-
-  @spec unauthorized(binary()) :: ResponseError.t()
-  def unauthorized(description \\ "Must include valid Authorization credentials"),
-    do: %ResponseError{
-      code: :unauthorized,
-      description: description
-    }
-
-  @spec method_not_allowed(binary()) :: ResponseError.t()
-  def method_not_allowed(description \\ "Method is not allowed."),
-    do: %ResponseError{
-      code: :method_not_allowed,
-      description: description
-    }
-
-  @spec internal_server_error(binary()) :: ResponseError.t()
-  def internal_server_error(description \\ "Internal Server Error"),
-    do: %ResponseError{code: :internal_server_error, description: description}
-
-  @spec bad_gateway(binary()) :: ResponseError.t()
-  def bad_gateway(description \\ "Bad Gateway"),
-    do: %ResponseError{code: :bad_gateway, description: description}
-
-  @spec service_unavailable(binary()) :: ResponseError.t()
-  def service_unavailable(description \\ "Service Unavailable"),
-    do: %ResponseError{code: :service_unavailable, description: description}
-
-  @spec too_many_requests(binary()) :: ResponseError.t()
-  def too_many_requests(description \\ "Exceeded request threshold."),
-    do: %ResponseError{
-      code: :too_many_requests,
-      description: description
-    }
-
-  @spec gone(binary()) :: ResponseError.t()
-  def gone(description \\ "Access to resource is no longer available."),
-    do: %ResponseError{code: :gone, description: description}
-
-  @spec request_entity_too_large(binary()) :: ResponseError.t()
-  def request_entity_too_large(description \\ "Request entity is too large."),
-    do: %ResponseError{code: :request_entity_too_large, description: description}
-
-  @spec unsupported_media_type(binary()) :: ResponseError.t()
-  def unsupported_media_type(description \\ "Request contains an unsupported media type."),
-    do: %ResponseError{code: :unsupported_media_type, description: description}
+  @type t :: %__MODULE__{
+          code: code(),
+          description: description(),
+          field: field() | nil
+        }
 
   @doc """
-  Given an Ecto Changeset with errors, convert the errors into a list of ResponseError objects.
+  Creates a new `Solicit.ResponseError` with the given code, description, and
+  optional field.
   """
-  @spec from_changeset(Changeset.t(), String.t() | nil) :: list(ResponseError.t())
-  def from_changeset(%Changeset{errors: errors} = c, field_prefix \\ nil) do
+  def new(code \\ :error, description, field \\ nil) do
+    %__MODULE__{code: code, description: description, field: field}
+  end
+
+  @spec generic_error(binary()) :: t()
+  def generic_error(description \\ "An unknown error occurred."),
+    do: new(description)
+
+  @spec timeout(binary()) :: t()
+  @deprecated "Use Solicit.ResponseError.request_timeout/1 or Solicit.ResponseError.gateway_timeout/1 instead."
+  def timeout(description \\ "Timeout"),
+    do: request_timeout(description)
+
+  @doc """
+  Converts the errors in an `Ecto.Changeset` with errors, convert the errors into
+  a list of `Solicit.ResponseError` structs.
+  """
+  @spec from_changeset(Ecto.Changeset.t(), String.t() | nil) :: list(t())
+  def from_changeset(%Ecto.Changeset{errors: errors} = c, field_prefix \\ nil) do
     # Attempt to get an ResponseError from a changeset errors keyword list entry
     # Remove all nils (failed ResponseError conversions) from the list
     errors
@@ -100,10 +116,10 @@ defmodule Solicit.ResponseError do
     |> Enum.map(&prefix_field_name(&1, field_prefix))
   end
 
-  @spec nested_errors(Ecto.Changeset.t()) :: list(ResponseError.t())
-  defp nested_errors(%Changeset{changes: changes}) do
+  @spec nested_errors(Ecto.Changeset.t()) :: list(t())
+  defp nested_errors(%Ecto.Changeset{changes: changes}) do
     Enum.flat_map(changes, fn
-      {key, %Changeset{} = c} ->
+      {key, %Ecto.Changeset{} = c} ->
         from_changeset(c, Atom.to_string(key))
 
       {key, changes} when is_list(changes) ->
@@ -114,18 +130,17 @@ defmodule Solicit.ResponseError do
     end)
   end
 
-  @spec nested_errors(any(), list()) :: list(ResponseError.t())
+  @spec nested_errors(any(), list()) :: list(t())
   defp nested_errors(_, []), do: []
 
-  defp nested_errors(key, changes)
-       when is_binary(key) and is_list(changes) and length(changes) > 0 do
+  defp nested_errors(key, changes) when is_binary(key) and is_list(changes) and changes != [] do
     length = length(changes)
 
     Enum.flat_map(0..(length - 1), fn index ->
       change = Enum.at(changes, index)
 
       case change do
-        %Changeset{} = c ->
+        %Ecto.Changeset{} = c ->
           from_changeset(c, "#{key}.#{index}")
 
         _ ->
@@ -134,32 +149,36 @@ defmodule Solicit.ResponseError do
     end)
   end
 
-  @spec prefix_field_name(ResponseError.t(), nil | String.t()) :: ResponseError.t()
-  defp prefix_field_name(%ResponseError{} = a, nil), do: a
+  @spec prefix_field_name(t(), nil | String.t()) :: t()
+  defp prefix_field_name(%__MODULE__{} = a, nil), do: a
 
-  defp prefix_field_name(%ResponseError{field: field} = a, prefix)
+  defp prefix_field_name(%__MODULE__{field: field} = a, prefix)
        when is_binary(field) and is_binary(prefix) do
     %{a | field: "#{prefix}.#{field}"}
   end
 
-  @doc """
-  Given a keyword list entry, attempt to turn it into an ResponseError.
-  Assumption: All Changeset errors are going to relate to a specific database field.
-  """
-  @spec from_changeset_error(tuple()) :: ResponseError.t() | tuple()
-  def from_changeset_error({field, error}) do
-    {code, description} = Solicit.Changeset.code_and_description(error)
+  # Given a keyword list entry, attempt to turn it into an ResponseError.
+  # Assumption: all changeset errors are going to relate to a specific database field.
+  @spec from_changeset_error(tuple()) :: t() | tuple()
+  defp from_changeset_error({field, error}) do
+    {code, description} = code_and_description(error)
 
     if code && description do
       field = if is_atom(field), do: Atom.to_string(field), else: field
 
-      %ResponseError{
+      %__MODULE__{
         field: field,
         code: code,
         description: description
       }
     end
   end
+
+  @spec code_and_description(tuple()) :: tuple()
+  defp code_and_description({description, [error_code: error_code]}),
+    do: {error_code, description}
+
+  defp code_and_description({changeset_error, _}), do: {:unknown_error, changeset_error}
 end
 
 defimpl Jason.Encoder, for: Solicit.ResponseError do

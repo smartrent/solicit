@@ -16,15 +16,6 @@ def deps do
 end
 ```
 
-## Core Components
-
-- [Response](./md/response.md)
-- [Plug](md/plug.md)
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
-
 ## Publishing
 
 ```bash

@@ -6,7 +6,6 @@ defmodule Solicit.Response do
   import Plug.Conn
   import Phoenix.Controller
 
-  alias Ecto.Changeset
   alias Solicit.ResponseError
 
   # 200
@@ -203,7 +202,7 @@ defmodule Solicit.Response do
   def timeout(conn) do
     conn
     |> put_status(:request_timeout)
-    |> json(%{errors: [ResponseError.timeout()]})
+    |> json(%{errors: [ResponseError.request_timeout()]})
     |> halt()
   end
 
@@ -303,7 +302,7 @@ defmodule Solicit.Response do
           Ecto.Changeset.t() | binary() | Postgrex.Error.t() | list()
         ) ::
           Plug.Conn.t()
-  def unprocessable_entity(conn, %Changeset{} = changeset) do
+  def unprocessable_entity(conn, %Ecto.Changeset{} = changeset) do
     conn
     |> put_status(:unprocessable_entity)
     |> json(%{errors: ResponseError.from_changeset(changeset)})

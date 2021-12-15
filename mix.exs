@@ -20,7 +20,8 @@ defmodule Solicit.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ]
+      ],
+      docs: docs()
     ]
   end
 
@@ -72,6 +73,14 @@ defmodule Solicit.MixProject do
       files: ~w(lib mix.exs README*),
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/smartrent/solicit"}
+    ]
+  end
+
+  defp docs() do
+    [
+      groups_for_modules: [
+        Plugs: [~r/\.Plugs\./i]
+      ]
     ]
   end
 end
