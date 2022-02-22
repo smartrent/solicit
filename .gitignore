@@ -14,3 +14,4 @@ erl_crash.dump
 .vscode
 /priv/plts
 .tool-versions
+/.history
