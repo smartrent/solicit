@@ -428,10 +428,14 @@ defmodule Solicit.ResponseTest do
     end
 
     defmodule Foo do
-      defstruct [:id, :name]
+      use Ecto.Schema
+
+      schema "foo" do
+        field(:name, :string)
+      end
     end
 
-    test "Should return 422 for a changeset" do
+    test "Should return 422 for a changeset with required code" do
       changeset =
         {%Foo{}, %{id: :string, name: :string}}
         |> Ecto.Changeset.change()
@@ -445,8 +449,30 @@ defmodule Solicit.ResponseTest do
       assert response == %{
                "errors" => [
                  %{
-                   "code" => "unknown_error",
+                   "code" => "required",
                    "description" => "can't be blank",
+                   "field" => "id"
+                 }
+               ]
+             }
+    end
+
+    test "Should return 422 for a changeset with validation code" do
+      changeset =
+        %Foo{}
+        |> Ecto.Changeset.change(%{id: "ABC"})
+        |> Ecto.Changeset.validate_format(:id, ~r/^[0-9]+$/)
+
+      response =
+        build_conn()
+        |> Response.unprocessable_entity(changeset)
+        |> json_response(:unprocessable_entity)
+
+      assert response == %{
+               "errors" => [
+                 %{
+                   "code" => "format",
+                   "description" => "has invalid format",
                    "field" => "id"
                  }
                ]

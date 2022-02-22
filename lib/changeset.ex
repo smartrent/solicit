@@ -10,5 +10,8 @@ defmodule Solicit.Changeset do
   def code_and_description({description, [error_code: error_code]}),
     do: {error_code, description}
 
+  def code_and_description({description, [validation: error_code]}),
+    do: {error_code, description}
+
   def code_and_description({changeset_error, _}), do: {:unknown_error, changeset_error}
 end
