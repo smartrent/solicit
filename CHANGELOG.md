@@ -5,6 +5,15 @@ See [Conventional Commits](Https://conventionalcommits.org) for commit guideline
 
 <!-- changelog -->
 
+## [1.2.1](https://github.com/smartrent/solicit/compare/1.2.0...1.2.1) (2022-02-22)
+
+
+
+
+### Bug Fixes:
+
+* handle format validation errors from a changeset to remove "unknown_error" responses
+
 ## [1.2.0](https://github.com/smartrent/solicit/compare/1.1.1...1.2.0) (2021-10-19)
 
 
