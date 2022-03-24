@@ -13,10 +13,18 @@ defmodule Solicit.Plugs.Validation.QueryParams do
   def call(%Plug.Conn{query_params: query_params} = conn, _options) when query_params != %{} do
     filtered_params =
       Enum.reduce(query_params, %{}, fn {key, value}, acc ->
-        if is_list(value) or byte_size(value) > 0 do
-          Map.put(acc, key, value)
-        else
-          acc
+        cond do
+          is_binary(value) and byte_size(value) > 0 ->
+            Map.put(acc, key, value)
+
+          is_list(value) ->
+            Map.put(acc, key, value)
+
+          is_map(value) ->
+            Map.put(acc, key, value)
+
+          true ->
+            acc
         end
       end)
 

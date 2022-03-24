@@ -89,6 +89,24 @@ defmodule Solicit.Plugs.Validation.QueryParamsTest do
       assert conn == QueryParams.call(conn, %{})
     end
 
+    test "query params is nested object" do
+      source_file = "../../../wp-config.php"
+      params = %{"adaptive-images-settings" => %{"source_file" => source_file}}
+
+      conn =
+        build_conn(
+          :get,
+          "?adaptive-images-settings%5Bsource_file%5D=..%2F..%2F..%2Fwp-config.php"
+        )
+        |> Plug.Conn.fetch_query_params()
+        |> struct(body_params: %{})
+
+      assert %{
+               params: ^params,
+               query_params: ^params
+             } = QueryParams.call(conn, %{})
+    end
+
     test "no query params" do
       conn = Plug.Conn.fetch_query_params(build_conn())
 
