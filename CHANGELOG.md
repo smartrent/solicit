@@ -5,6 +5,14 @@ See [Conventional Commits](Https://conventionalcommits.org) for commit guideline
 
 <!-- changelog -->
 
+## [1.2.2](https://github.com/smartrent/solicit/compare/1.2.1...1.2.2) (2022-03-24)
+
+### Bug Fixes:
+
+* Fixes `Solicit.Plugs.Validation.QueryParams` handling of nested maps ([#71](https://github.com/smartrent/solicit/pull/71))
+
+
+
 ## [1.2.1](https://github.com/smartrent/solicit/compare/1.2.0...1.2.1) (2022-02-22)
 
 
