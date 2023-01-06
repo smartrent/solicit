@@ -317,7 +317,7 @@ defmodule Solicit.Response do
     |> halt()
   end
 
-  def unprocessable_entity(conn, message) when is_binary(message) do
+  def unprocessable_entity(conn, message) when is_binary(message) or is_atom(message) do
     conn
     |> put_status(:unprocessable_entity)
     |> json(%{errors: [message]})
