@@ -139,6 +139,12 @@ defmodule Solicit.ResponseTest do
       |> Response.bad_request()
       |> json_response(:bad_request)
     end
+
+    test "Should return 400 with atoms" do
+      build_conn()
+      |> Response.bad_request(:error)
+      |> json_response(:bad_request)
+    end
   end
 
   describe "unauthorized" do
@@ -498,6 +504,12 @@ defmodule Solicit.ResponseTest do
                  }
                ]
              }
+    end
+
+    test "Should return 422 with atoms" do
+      build_conn()
+      |> Response.unprocessable_entity(:error)
+      |> json_response(:unprocessable_entity)
     end
   end
 
