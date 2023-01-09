@@ -59,7 +59,10 @@ jobs:
       run: mix coveralls.lcov
 
     - name: Coverage report
+      if: ${{ github.event_name == 'pull_request' }}
       uses: romeovs/lcov-reporter-action@v0.2.16
       with:
+        delete-old-comments: true
+        filter-changed-files: true
         lcov-file: ./cover/lcov.info
         github-token: ${{ secrets.GITHUB_TOKEN }}
