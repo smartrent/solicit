@@ -27,7 +27,10 @@ be found at [https://hexdocs.pm/log](https://hexdocs.pm/log).
 
 ## Publishing
 
-```bash
-mix git_ops.release    # bumps version, generates changelog, commits and tags
-mix hex.publish        # publishes to hex.pm
-```
+1. Update [`CHANGELOG.md`](./CHANGELOG.md)
+2. Bump `@version` in [`mix.exs`](./mix.exs)
+3. `git commit -m 'release x.y.z'`
+4. `git tag -a x.y.z -m 'release x.y.z'`
+4. `git push --follow-tags`
+5. `mix hex.publish`
+6. Create a [GitHub release](https://github.com/smartrent/solicit/releases/new)

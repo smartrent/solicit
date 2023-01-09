@@ -36,7 +36,6 @@ defmodule Solicit.MixProject do
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:git_hooks, "~> 0.6", only: [:test, :dev], runtime: false},
-      {:git_ops, "~> 2.4", only: [:dev], runtime: false},
       {:jason, "~> 1.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:phoenix_ecto, "~> 4.1"},
