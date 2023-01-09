@@ -5,7 +5,7 @@ config :phoenix, :json_library, Jason
 
 if Mix.env() == :dev do
   config :git_hooks,
-    auto_install: true,
+    auto_install: false,
     verbose: true,
     hooks: [
       pre_commit: [
@@ -24,17 +24,6 @@ if Mix.env() == :dev do
           {:mix_task, :test},
           {:mix_task, :dialyzer}
         ]
-      ],
-      commit_msg: [
-        tasks: [
-          {:cmd, "mix git_ops.check_message", include_hook_args: true}
-        ]
       ]
     ]
-
-  config :git_ops,
-    mix_project: Mix.Project.get!(),
-    changelog_file: "CHANGELOG.md",
-    repository_url: "https://github.com/smartrent/solicit",
-    manage_mix_version?: true
 end
