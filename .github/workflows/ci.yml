@@ -21,7 +21,7 @@ jobs:
             elixir: 1.14
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Elixir
       uses: erlef/setup-beam@v1
@@ -29,23 +29,22 @@ jobs:
         elixir-version: ${{matrix.elixir}}
         otp-version: ${{matrix.otp}}
 
-    - name: Restore dependencies and build cache
-      uses: actions/cache@v2
+    - name: Dependencies cache
+      uses: actions/cache@v3
       with:
-        path: |
-          ~/.mix
-          _build
-          !_build/test/lib/solicit
-          deps
-          priv/plts
-        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-
+        path: deps
+        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix_deps-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix_deps-
+
+    - name: Build cache
+      uses: actions/cache@v3
+      with:
+        path: _build
+        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-build-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-build-
 
     - name: Install dependencies
-      run: mix deps.get
-
-    - name: Build
-      run: mix compile --warnings-as-errors
+      run: mix do local.rebar --force, local.hex --force, deps.get, compile --warnings-as-errors
 
     - name: Check formatting
       run: mix format --check-formatted
@@ -57,4 +56,10 @@ jobs:
       run: mix dialyzer
 
     - name: Run tests w/ coverage
-      run: mix coveralls.html
+      run: mix coveralls.lcov
+
+    - name: Coverage report
+      uses: romeovs/lcov-reporter-action@v0.2.16
+      with:
+        lcov-file: ./cover/lcov.info
+        github-token: ${{ secrets.GITHUB_TOKEN }}
