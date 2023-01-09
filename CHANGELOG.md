@@ -5,6 +5,14 @@ See [Conventional Commits](Https://conventionalcommits.org) for commit guideline
 
 <!-- changelog -->
 
+## [1.3.0](https://github.com/smartrent/solicit/compare/1.2.2...1.3.0) (2023-01-09)
+
+### Features:
+
+* Add support for atoms to `Response.unprocessable_entity/2` ([#112](https://github.com/smartrent/solicit/pull/112))
+
+
+
 ## [1.2.2](https://github.com/smartrent/solicit/compare/1.2.1...1.2.2) (2022-03-24)
 
 ### Bug Fixes:
