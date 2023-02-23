@@ -2,6 +2,7 @@ defmodule Solicit.MixProject do
   use Mix.Project
 
   @version "1.3.0"
+  @source_url "https://github.com/smartrent/solicit"
 
   def project do
     [
@@ -12,6 +13,7 @@ defmodule Solicit.MixProject do
       deps: deps(),
       description: description(),
       package: package(),
+      docs: docs(),
       dialyzer: dialyzer(Mix.env()),
       aliases: aliases(),
       test_coverage: [tool: ExCoveralls],
@@ -62,16 +64,22 @@ defmodule Solicit.MixProject do
   end
 
   defp description() do
-    "Solicit is an Elixir package that provides basic API Response Handling."
+    "Solicit provides opinionated helpers for Phoenix APIs"
+  end
+
+  defp docs do
+    [
+      extras: ["CHANGELOG.md"],
+      source_ref: @version,
+      source_url: @source_url
+    ]
   end
 
   defp package() do
     [
-      # These are the default files included in the package
-      organization: "smartrent",
       files: ~w(lib mix.exs README*),
-      licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/smartrent/solicit"}
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 end
