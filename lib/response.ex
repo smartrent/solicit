@@ -300,7 +300,7 @@ defmodule Solicit.Response do
   """
   @spec unprocessable_entity(
           Plug.Conn.t(),
-          Ecto.Changeset.t() | binary() | Postgrex.Error.t() | list()
+          Ecto.Changeset.t() | binary() | atom() | Postgrex.Error.t() | list()
         ) ::
           Plug.Conn.t()
   def unprocessable_entity(conn, %Changeset{} = changeset) do
