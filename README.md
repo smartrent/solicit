@@ -11,7 +11,7 @@ Solicit can be installed by adding `solicit` to your list of dependencies in `mi
 ```elixir
 def deps do
   [
-    {:solicit, github: "smartrent/solicit", branch: "main"}
+    {:solicit, "~> 1.3"}
   ]
 end
 ```
