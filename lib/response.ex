@@ -23,7 +23,9 @@ defmodule Solicit.Response do
         result,
         fields \\ nil
       ) do
-    json(conn, as_json(result, fields))
+    conn
+    |> json(as_json(result, fields))
+    |> halt()
   end
 
   @doc """
@@ -31,7 +33,9 @@ defmodule Solicit.Response do
   """
   @spec ok(Plug.Conn.t()) :: Plug.Conn.t()
   def ok(conn) do
-    json(conn, nil)
+    conn
+    |> json(nil)
+    |> halt()
   end
 
   # 201
@@ -43,6 +47,7 @@ defmodule Solicit.Response do
     conn
     |> put_status(:created)
     |> json(as_json(result, fields))
+    |> halt()
   end
 
   # 202
@@ -54,6 +59,7 @@ defmodule Solicit.Response do
     conn
     |> put_status(:accepted)
     |> json(nil)
+    |> halt()
   end
 
   @spec accepted(Plug.Conn.t(), any()) :: Plug.Conn.t()
@@ -61,6 +67,7 @@ defmodule Solicit.Response do
     conn
     |> put_status(:accepted)
     |> json(%{details: details})
+    |> halt()
   end
 
   @spec accepted(Plug.Conn.t(), term(), term()) :: Plug.Conn.t()
@@ -68,6 +75,7 @@ defmodule Solicit.Response do
     conn
     |> put_status(:accepted)
     |> json(as_json(details, fields))
+    |> halt()
   end
 
   # 204
@@ -76,7 +84,9 @@ defmodule Solicit.Response do
   """
   @spec no_content(Plug.Conn.t()) :: Plug.Conn.t()
   def no_content(conn) do
-    send_resp(conn, :no_content, "")
+    conn
+    |> send_resp(:no_content, "")
+    |> halt()
   end
 
   # 400
@@ -300,7 +310,7 @@ defmodule Solicit.Response do
   """
   @spec unprocessable_entity(
           Plug.Conn.t(),
-          Ecto.Changeset.t() | binary() | Postgrex.Error.t() | list()
+          Ecto.Changeset.t() | binary() | atom() | Postgrex.Error.t() | list()
         ) ::
           Plug.Conn.t()
   def unprocessable_entity(conn, %Changeset{} = changeset) do
