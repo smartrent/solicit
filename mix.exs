@@ -43,7 +43,7 @@ defmodule Solicit.MixProject do
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix, "~> 1.4"},
-      {:plug_cowboy, ">= 1.0.0"},
+      {:plug_cowboy, "~> 2.8.1"},
       {:postgrex, ">= 0.0.0"}
     ]
   end
