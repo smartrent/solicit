@@ -16,8 +16,13 @@ defmodule Solicit.MixProject do
       docs: docs(),
       dialyzer: dialyzer(Mix.env()),
       aliases: aliases(),
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -40,7 +45,6 @@ defmodule Solicit.MixProject do
       {:excoveralls, "~> 0.10", only: :test},
       {:git_hooks, "~> 0.6", only: [:test, :dev], runtime: false},
       {:jason, "~> 1.0"},
-      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix, "~> 1.4"},
       {:plug_cowboy, "~> 2.8.1"},
