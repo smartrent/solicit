@@ -91,21 +91,23 @@ defmodule Solicit.Response do
 
   # 400
   @doc """
-  Signifies a bad request.
+  The server cannot or will not process the request due to something that is perceived to be a client error
+  (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+
+  This should only be used if we can't parse the incoming json/xml payloads because there are syntactic errors in those
+  payloads.
+
+  Phoenix Framework more or less rejects these messages before they reach the router itself so this may
+  actually never be needed.
+
+  For bad user input that can be retried, check out 422 Unprocessable Entity.
+  For user requests that cannot be retried, check out 409 Conflict.
   """
   @spec bad_request(Plug.Conn.t()) :: Plug.Conn.t()
   def bad_request(conn) do
     conn
     |> put_status(:bad_request)
     |> json(%{errors: [ResponseError.bad_request()]})
-    |> halt()
-  end
-
-  @spec bad_request(Plug.Conn.t(), Ecto.Changeset.t()) :: Plug.Conn.t()
-  def bad_request(conn, %Ecto.Changeset{} = changeset) do
-    conn
-    |> put_status(:bad_request)
-    |> json(%{errors: ResponseError.from_changeset(changeset)})
     |> halt()
   end
 
@@ -306,7 +308,9 @@ defmodule Solicit.Response do
 
   # 422
   @doc """
-  Signifies an unprocessable_entity response.
+  The request was well-formed, but was unable to be followed due to semantic errors.
+
+  Examples: The request cannot be completed because the JSON payload is missing `email`, a required field.
   """
   @spec unprocessable_entity(
           Plug.Conn.t(),
