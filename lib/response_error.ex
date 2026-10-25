@@ -91,7 +91,7 @@ defmodule Solicit.ResponseError do
   """
   @spec from_changeset(Changeset.t(), String.t() | nil) :: list(ResponseError.t())
   def from_changeset(%Changeset{errors: errors} = c, field_prefix \\ nil) do
-    # Attempt to get an ResponseError from a changeset errors keyword list entry
+    # Attempt to get a ResponseError from a changeset errors keyword list entry
     # Remove all nils (failed ResponseError conversions) from the list
     errors
     |> Enum.map(&from_changeset_error/1)
@@ -143,7 +143,7 @@ defmodule Solicit.ResponseError do
   end
 
   @doc """
-  Given a keyword list entry, attempt to turn it into an ResponseError.
+  Given a keyword list entry, attempt to turn it into a ResponseError.
   Assumption: All Changeset errors are going to relate to a specific database field.
   """
   @spec from_changeset_error(tuple()) :: ResponseError.t() | tuple()

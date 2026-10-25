@@ -2,8 +2,8 @@ defmodule Solicit.Plugs.Validation.QueryParams do
   @moduledoc """
   Check to make sure that if a query parameter is provided that it has a value
     - /api?test=1&foo=abc123
-    - /api?test=&foo= would be strip out the empty query params and be equiv to /api
-    - /api?test=&foo=123 would be strip out the empty query params and be equiv to /api?foo=123
+    - /api?test=&foo= would strip out the empty query params and be equiv to /api
+    - /api?test=&foo=123 would strip out the empty query params and be equiv to /api?foo=123
   """
 
   @spec init(keyword()) :: keyword()
